@@ -1,0 +1,120 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="frontend.Views.MainPage"
+             xmlns:viewModels="clr-namespace:frontend.ViewModels"
+             BackgroundColor="#f5f5f5">
+
+    <ContentPage.BindingContext>
+        <viewModels:MainViewModel />
+    </ContentPage.BindingContext>
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- App Title -->
+            <Label Text="Welcome to Idea Flow"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center"
+                   TextColor="#333333"/>
+
+            <!-- App Subtitle -->
+            <Label Text="Unleash Creativity, Sharpen Your Mind, Spark Conversations"
+                   FontSize="16"
+                   HorizontalTextAlignment="Center"
+                   TextColor="#777777"/>
+
+            <!-- Task 1: Brainstorming -->
+            <Frame BackgroundColor="#e0f7fa"
+                   CornerRadius="10"
+                   Padding="15"
+                   HasShadow="True">
+                <StackLayout Orientation="Horizontal" Spacing="15">
+                    <Image Source="brainstorm_icon.png" WidthRequest="50" HeightRequest="50"/>
+                    <VerticalStackLayout>
+                        <Label Text="Brainstorming"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#00796b"/>
+                        <Label Text="Generate, organize, and refine your creative ideas."
+                               LineBreakMode="WordWrap"
+                               FontSize="14"
+                               TextColor="#004d40"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               MaximumWidthRequest="250"/>
+                        <Button Text="Start" BackgroundColor="#004d40" TextColor="White"
+                                CornerRadius="5" Command="{Binding NavigateToBrainstorm}"/>
+                    </VerticalStackLayout>
+                </StackLayout>
+            </Frame>
+
+            <!-- Task 2: Daily Puzzle -->
+            <Frame BackgroundColor="#fff3e0"
+                   CornerRadius="10"
+                   Padding="15"
+                   HasShadow="True">
+                <StackLayout Orientation="Horizontal" Spacing="15">
+                    <Image Source="puzzles_icon.png" WidthRequest="50" HeightRequest="50"/>
+                    <VerticalStackLayout>
+                        <Label Text="Daily Puzzle"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#ef6c00"/>
+                        <Label Text="Challenge your mind with a new puzzle every day."
+                               FontSize="14"
+                               TextColor="#e65100"
+                               MaximumWidthRequest="250"/>
+                        <Button Text="Play Now" BackgroundColor="#e65100" TextColor="White"
+                                CornerRadius="5" Command="{Binding NavigateToPuzzles}"/>
+                    </VerticalStackLayout>
+                </StackLayout>
+            </Frame>
+
+            <!-- Task 3: Conversation Starter -->
+            <Frame BackgroundColor="#e8f5e9"
+                   CornerRadius="10"
+                   Padding="15"
+                   HasShadow="True">
+                <StackLayout Orientation="Horizontal" Spacing="15">
+                    <Image Source="conversation_icon.png" WidthRequest="50" HeightRequest="50"/>
+                    <VerticalStackLayout>
+                        <Label Text="Conversation Starter"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#2e7d32"/>
+                        <Label Text="Break the ice and spark engaging conversations."
+                               FontSize="14"
+                               TextColor="#1b5e20"
+                               MaximumWidthRequest="250"/>
+                        <Button Text="Start Chat" BackgroundColor="#1b5e20" TextColor="White"
+                                CornerRadius="5" Command="{Binding NavigateToConversation}"/>
+                    </VerticalStackLayout>
+                </StackLayout>
+            </Frame>
+
+            <!-- Task 4: Test -->
+            <Frame BackgroundColor="#e8f5e9"
+            CornerRadius="10"
+            Padding="15"
+            HasShadow="True">
+                <StackLayout Orientation="Horizontal" Spacing="15">
+                    <VerticalStackLayout>
+                        <Label Text="Test"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="#2e7d32"/>
+                        <Label Text="Testing"
+                       FontSize="14"
+                       TextColor="#1b5e20"
+                       MaximumWidthRequest="250"/>
+                        <Button Text="Start Test" BackgroundColor="#1b5e20" TextColor="White"
+                        CornerRadius="5" Command="{Binding NavigateToTest}"/>
+                    </VerticalStackLayout>
+                </StackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

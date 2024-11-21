@@ -1,0 +1,52 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="frontend.Views.TestPage"
+             xmlns:viewModels="clr-namespace:frontend.ViewModels"
+             BackgroundColor="#f5f5f5"
+             Title="Question Answer Page">
+
+    <ContentPage.BindingContext>
+        <viewModels:TestViewModel />
+    </ContentPage.BindingContext>
+    
+    <VerticalStackLayout Padding="20" Spacing="20">
+
+        <!-- Title -->
+        <Label Text="Ask a Question"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               TextColor="#333" />
+
+        <!-- Question Input -->
+        <Entry x:Name="QuestionInput"
+               Placeholder="Type your question here..."
+               FontSize="16"
+               BackgroundColor="White"
+               TextColor="#000"
+               HeightRequest="50"
+               VerticalOptions="CenterAndExpand"
+               HorizontalOptions="Fill" 
+               Text="{Binding QuestionInput}"/>
+
+        <!-- Submit Button -->
+        <Button Text="Get Answer"
+                FontSize="16"
+                BackgroundColor="#007BFF"
+                TextColor="White"
+                CornerRadius="8"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Command="{Binding GetAnswer}" />
+
+        <!-- Answer Display -->
+        <Label x:Name="AnswerLabel"
+               FontSize="16"
+               TextColor="#555"
+               LineBreakMode="WordWrap"
+               HorizontalOptions="Fill"
+               VerticalOptions="Center"
+               Text="{Binding AnswerOutput}"/>
+
+    </VerticalStackLayout>
+</ContentPage>
