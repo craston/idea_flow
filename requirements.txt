@@ -1,0 +1,4 @@
+fastapi[standard]
+langchain-community
+langchain-ollama
+pydantic-settings
