@@ -10,7 +10,7 @@ from pydantic.networks import IPv4Address
 from pydantic_settings import BaseSettings
 from pydantic import Field
 
-from models import create_bs_chain, create_test_chain
+from models import create_bs_chain, create_bs_context_chain, create_test_chain
 
 
 _LOGGER = logging.getLogger("main:server")
@@ -75,6 +75,19 @@ def brainstorm(
 
     return llm_responses
 
+
+@app.get("/brainstorm_context")
+def brainstorm_context(topic: str):
+    chain = create_bs_context_chain()
+
+    try:
+        llm_response = chain.invoke({
+            "topic": topic,
+        })
+    except Exception as e:
+        return {"error": str(e)}
+    
+    return llm_response
 
 if __name__ == "__main__":
     import uvicorn

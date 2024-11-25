@@ -10,7 +10,7 @@ from langchain_ollama import OllamaLLM
 import os
 from dotenv import load_dotenv
 
-from schemas import BrainstormingOutput, LLMModel, TestOutput
+from schemas import BrainstormingOutput, LLMModel, TestOutput, BrainstormingExamplesOutput
 
 load_dotenv()
 
@@ -101,7 +101,6 @@ def create_bs_chain() -> RunnableSerializable:
         partial_variables={"format_instructions": parser.get_format_instructions()},
     )
 
-    import pdb; pdb.set_trace()
     model = OllamaLLM(
         model=LLMModel.gemma2_7b,
         cache=SQLiteCache(
@@ -118,3 +117,42 @@ def create_bs_chain() -> RunnableSerializable:
 
     return chain
 
+def create_bs_context_chain() -> RunnableSerializable:
+    CACHE_DIR.mkdir(exist_ok=True, parents=True)
+
+    template = """
+    You are helpful assistant.
+    You are provided with a brainstorming topic. Your task is to provide a 
+    list of 5 possible contexts or scenarios related to the topic. Keep the descriptions of the
+    contexts brief (not more the 5 words) and relevant to the topic.
+
+    The topic for brainstorming is: "{topic}".
+    Generate 5 different contexts or scenarios related to this topic.
+
+    The output must be provided as JSON object with the following schema:
+    {format_instructions}
+    """
+
+    parser = JsonOutputParser(pydantic_object=BrainstormingExamplesOutput)
+
+    prompt = PromptTemplate(
+        template=template,
+        input_variables=["topic"],
+        partial_variables={"format_instructions": parser.get_format_instructions()},
+    )
+
+    model = OllamaLLM(
+        model=LLMModel.gemma2_7b,
+        cache=SQLiteCache(
+            str(CACHE_DIR / f"ollama-{LLMModel.gemma2_7b.replace(':', '-')}.db")
+        ),
+        temperature=0.0,
+        top_p=1.0,
+        num_ctx=CONTEXT[LLMModel.gemma2_7b],
+        num_predict=-1,
+        base_url=OLLAMA_BASE_URL,
+    )
+
+    chain: RunnableSerializable = prompt | model | parser
+
+    return chain
