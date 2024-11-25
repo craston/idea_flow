@@ -21,6 +21,8 @@ public partial class BrainstormViewModel : ObservableObject
         DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:8000" : "http://localhost:8000";
     private readonly static string _bsUrl = $"{_baseAddress}/brainstorm/";
     private readonly static string _bs_contextUrl = $"{_baseAddress}/brainstorm_context";
+    private readonly static string _bs_goalsUrl = $"{_baseAddress}/brainstorm_goals";
+    private readonly static string _bs_preferencesUrl = $"{_baseAddress}/brainstorm_preferences";
 
     private List<string> _defaultExamples = ["Vacation Ideas", "Team Building", "Product Ideas"];
     private string _currentPrompt = "";
@@ -69,7 +71,7 @@ public partial class BrainstormViewModel : ObservableObject
         {
             case 0: _brainstormInput.Topic = CurrentInput; break;
             case 1: _brainstormInput.Context = CurrentInput; break;
-            case 2: _brainstormInput.Goals.Add(CurrentInput); break;
+            case 2: _brainstormInput.Goals = new List<string>(CurrentInput.Split(',')); break;
             case 3: _brainstormInput.Preferences.Add(CurrentInput); break;
             case 4: _brainstormInput.Tags.Add(CurrentInput); break;
         }
@@ -80,31 +82,43 @@ public partial class BrainstormViewModel : ObservableObject
         switch (CurrentPromptIndex)
         {
             case 0: Examples = _defaultExamples; break;
-            case 1: Examples = await GetContextExamples(_brainstormInput.Topic); break;
-            case 2: Examples = GetGoalsExamples(); break;
-            case 3: Examples = GetPreferencesExamples(); break;
+            case 1: Examples = await GetContextExamples(); break;
+            case 2: Examples = await GetGoalsExamples(); break;
+            case 3: Examples = await GetPreferencesExamples(); break;
             case 4: Examples = GetTagsExamples(); break;
         }
     }
 
-    private async Task<List<string>> GetContextExamples(string topic)
+    private async Task<List<string>> GetContextExamples()
     {
         UriBuilder uri = new(_bs_contextUrl);
         var query = HttpUtility.ParseQueryString(uri.Query);
-        query["topic"] = topic;
+        query["topic"] = _brainstormInput.Topic;
         uri.Query = query.ToString();
 
         return await GetExamples(uri.ToString());
     }
 
-    private List<string> GetGoalsExamples()
+    private async Task<List<string>> GetGoalsExamples()
     {
-        return new List<string> { "Increase revenue", "Improve customer satisfaction", "Reduce costs" };
+        UriBuilder uri = new(_bs_goalsUrl);
+        var query = HttpUtility.ParseQueryString(uri.Query);
+        query["topic"] = _brainstormInput.Topic;
+        query["context"] = _brainstormInput.Context;
+        uri.Query = query.ToString();
+
+        return await GetExamples(uri.ToString());
     }
 
-    private List<string> GetPreferencesExamples()
+    private async Task<List<string>> GetPreferencesExamples()
     {
-        return new List<string> { "Fast", "Cheap", "High quality" };
+        UriBuilder uri = new(_bs_preferencesUrl);
+        var query = HttpUtility.ParseQueryString(uri.Query);
+        query["topic"] = _brainstormInput.Topic;
+        query["context"] = _brainstormInput.Context;
+        query["goals"] = string.Join(",", _brainstormInput.Goals);
+        uri.Query = query.ToString();
+        return await GetExamples(uri.ToString());
     }
 
     private List<string> GetTagsExamples()
