@@ -10,7 +10,7 @@ from pydantic.networks import IPv4Address
 from pydantic_settings import BaseSettings
 from pydantic import Field
 
-from models import create_bs_chain, create_bs_context_chain, create_bs_goals_chain, create_bs_preferences_chain, create_test_chain
+from models import create_bs_chain, create_bs_context_chain, create_bs_goals_chain, create_bs_preferences_chain, create_bs_tags_chain, create_test_chain
 
 
 _LOGGER = logging.getLogger("main:server")
@@ -114,6 +114,22 @@ def brainstorm_preferences(topic: str, context: str, goals: str):
             "goals": goals,
         })
 
+    except Exception as e:
+        return {"error": str(e)}
+    
+    return llm_response
+
+@app.get("/brainstorm_tags")
+def brainstorm_tags(topic: str, context: str, goals: str, preferences: str):
+    chain = create_bs_tags_chain()
+
+    try:
+        llm_response = chain.invoke({
+            "topic": topic,
+            "context": context,
+            "goals": goals,
+            "preferences": preferences,
+        })
     except Exception as e:
         return {"error": str(e)}
     

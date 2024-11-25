@@ -11,7 +11,7 @@ import os
 from dotenv import load_dotenv
 
 from schemas import BrainstormingOutput, LLMModel, TestOutput, BrainstormingExamplesOutput
-from backend.prompts.brainstorm import BRAINSTORM_GOALS_PROMPT, BRAINSTORM_PREFERENCES_PROMPT, BRAINSTORM_PROMPT, BRAINSTORM_CONTEXT_PROMPT
+from backend.prompts.brainstorm import BRAINSTORM_GOALS_PROMPT, BRAINSTORM_PREFERENCES_PROMPT, BRAINSTORM_PROMPT, BRAINSTORM_CONTEXT_PROMPT, BRAINSTORM_TAGS_PROMPT
 from backend.prompts.test import TEST_PROMPT 
 
 load_dotenv()
@@ -102,6 +102,17 @@ def create_bs_preferences_chain() -> RunnableSerializable:
     prompt = PromptTemplate(
         template=BRAINSTORM_PREFERENCES_PROMPT,
         input_variables=["topic", "context", "goals"],
+        partial_variables={"format_instructions": parser.get_format_instructions()},
+    )
+
+    return _create_chain(prompt, parser)
+
+def create_bs_tags_chain() -> RunnableSerializable:
+    parser = JsonOutputParser(pydantic_object=BrainstormingExamplesOutput)
+
+    prompt = PromptTemplate(
+        template=BRAINSTORM_TAGS_PROMPT,
+        input_variables=["topic", "context", "goals", "preferences"],
         partial_variables={"format_instructions": parser.get_format_instructions()},
     )
 

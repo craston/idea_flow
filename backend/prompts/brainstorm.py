@@ -68,3 +68,19 @@ BRAINSTORM_PREFERENCES_PROMPT = """
     The output must be provided as JSON object with the following schema:
     {format_instructions}
     """
+
+BRAINSTORM_TAGS_PROMPT = """
+    You are helpful assistant.
+    You are provided with a brainstorming topic, along with its context, goals, and preferences. Your task is to provide a
+    list of 5 possible tags or keywords related to the topic. Keep the descriptions of the
+    tags brief (not more the 2 words) and relevant to the topic.
+
+    The topic for brainstorming is: "{topic}".
+    The context for brainstorming is: "{context}".
+    The goals for brainstorming are: "{goals}".
+    The preferences for brainstorming are: "{preferences}".
+    Generate 5 different tags or keywords related to this topic.
+
+    The output must be provided as JSON object with the following schema:
+    {format_instructions}
+    """
