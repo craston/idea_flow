@@ -53,3 +53,18 @@ BRAINSTORM_GOALS_PROMPT = """
     {format_instructions}
     """
 
+BRAINSTORM_PREFERENCES_PROMPT = """
+    You are helpful assistant.
+    You are provided with a brainstorming topic, along with its context and goals. Your task is to provide a
+    list of 5 possible preferences or constraints related to the topic (e.g., 'budget-friendly', 'adventurous'). 
+    Keep the descriptions of the
+    preferences brief (not more the 3 words) and relevant to the topic.
+    
+    The topic for brainstorming is: "{topic}".
+    The context for brainstorming is: "{context}".
+    The goals for brainstorming are: "{goals}".
+    Generate 5 different preferences or constraints related to this topic.
+
+    The output must be provided as JSON object with the following schema:
+    {format_instructions}
+    """
