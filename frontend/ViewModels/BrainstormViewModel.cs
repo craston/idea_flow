@@ -23,14 +23,17 @@ public partial class BrainstormViewModel : ObservableObject
     private readonly static string _bs_contextUrl = $"{_baseAddress}/brainstorm_context";
     private readonly static string _bs_goalsUrl = $"{_baseAddress}/brainstorm_goals";
     private readonly static string _bs_preferencesUrl = $"{_baseAddress}/brainstorm_preferences";
+    private readonly static string _bs_tagsUrl = $"{_baseAddress}/brainstorm_tags";
 
     private List<string> _defaultExamples = ["Vacation Ideas", "Team Building", "Product Ideas"];
     private string _currentPrompt = "";
     private string _currentInput = "";
+    private string _nextText = "Next";
     private int _currentPromptIndex = 0;
-    private List<string> _examples = new List<string>();
+    private List<string> _examples = [];
+    private bool _isBusy = false;
 
-    private BrainstormInput _brainstormInput = new BrainstormInput();
+    private BrainstormInput _brainstormInput = new();
     public string CurrentPrompt
     {
         get => _currentPrompt;
@@ -53,6 +56,17 @@ public partial class BrainstormViewModel : ObservableObject
         set => SetProperty(ref _examples, value);
     }
 
+    public string NextText
+    {
+        get => _nextText;
+        set => SetProperty(ref _nextText, value);
+    }
+
+    public bool IsBusy
+    {
+        get => _isBusy;
+        set => SetProperty(ref _isBusy, value);
+    }
     private void _getPrompt()
     {
         switch (CurrentPromptIndex)
@@ -85,7 +99,7 @@ public partial class BrainstormViewModel : ObservableObject
             case 1: Examples = await GetContextExamples(); break;
             case 2: Examples = await GetGoalsExamples(); break;
             case 3: Examples = await GetPreferencesExamples(); break;
-            case 4: Examples = GetTagsExamples(); break;
+            case 4: Examples = await GetTagsExamples(); break;
         }
     }
 
@@ -121,12 +135,19 @@ public partial class BrainstormViewModel : ObservableObject
         return await GetExamples(uri.ToString());
     }
 
-    private List<string> GetTagsExamples()
+    private async Task<List<string>> GetTagsExamples()
     {
-        return new List<string> { "Technology", "Health", "Education" };
+        UriBuilder uriBuilder = new(_bs_tagsUrl);
+        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+        query["topic"] = _brainstormInput.Topic;
+        query["context"] = _brainstormInput.Context;
+        query["goals"] = string.Join(",", _brainstormInput.Goals);
+        query["preferences"] = string.Join(",", _brainstormInput.Preferences);
+        uriBuilder.Query = query.ToString();
+        return await GetExamples(uriBuilder.ToString());
     }
 
-    private async Task<List<string>> GetExamples(string url)
+    private static async Task<List<string>> GetExamples(string url)
     {
         using (var httpClient = new HttpClient())
         {
@@ -149,22 +170,40 @@ public partial class BrainstormViewModel : ObservableObject
             }
         }
     }
-    public ICommand NextCommand => new RelayCommand(Next);
-    public ICommand BackCommand => new RelayCommand(Back);
+    public ICommand NextCommand => new AsyncRelayCommand(Next);
+    public ICommand BackCommand => new AsyncRelayCommand(Back);
 
-    private void Next()
+    private async Task Next()
     {
         SaveInput();
         CurrentPromptIndex++;
-        UpdateExamples();
+        if (CurrentPromptIndex == 5)
+        {
+            NextText = "Start Brainstorming";
+            
+        }
+        IsBusy = true;
+        await UpdateExamples();
         _getPrompt();
+        CurrentInput = "";
+        IsBusy = false;
     }
 
-    private void Back()
+    private async Task Back()
     {
         CurrentPromptIndex--;
-        UpdateExamples();
+        IsBusy = true;
+        await UpdateExamples();
         _getPrompt();
+        switch(CurrentPromptIndex)
+        {
+            case 0: CurrentInput = _brainstormInput.Topic; break;
+            case 1: CurrentInput = _brainstormInput.Context; break;
+            case 2: CurrentInput = string.Join(",", _brainstormInput.Goals); break;
+            case 3: CurrentInput = string.Join(",", _brainstormInput.Preferences); break;
+            case 4: CurrentInput = string.Join(",", _brainstormInput.Tags); break;
+        }
+        IsBusy = false;
     }
 
 

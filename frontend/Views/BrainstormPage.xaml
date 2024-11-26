@@ -6,16 +6,16 @@
     <ContentPage.BindingContext>
         <viewmodels:BrainstormViewModel />
     </ContentPage.BindingContext>
-
-    <VerticalStackLayout Padding="20">
-        <!-- Prompt -->
-        <Label Text="{Binding CurrentPrompt}" 
+    <AbsoluteLayout>
+        <VerticalStackLayout Padding="20">
+            <!-- Prompt -->
+            <Label Text="{Binding CurrentPrompt}" 
                FontSize="20"
                FontAttributes="Bold" 
                HorizontalTextAlignment="Center" />
 
-        <!-- Entry -->
-        <Entry x:Name="CurrentInput"
+            <!-- Entry -->
+            <Entry x:Name="CurrentInput"
                Placeholder="Type here..."
                FontSize="16"
                BackgroundColor="White"
@@ -24,27 +24,27 @@
                VerticalOptions="CenterAndExpand"
                HorizontalOptions="Fill" 
                Text="{Binding CurrentInput}"/>
-        
-        <!-- Examples -->
-        <Label Text="Examples:" 
+
+            <!-- Examples -->
+            <Label Text="Examples:" 
                FontSize="16"
                FontAttributes="Bold" 
                HorizontalTextAlignment="Center" />
 
-        <StackLayout IsVisible="{Binding Examples.Count}">
-        <Label Text="Examples:" FontAttributes="Italic" />
-        <CollectionView ItemsSource="{Binding Examples}" SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Label Text="{Binding}" FontSize="14" />
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-        </StackLayout>
+            <StackLayout IsVisible="{Binding Examples.Count}">
+                <Label Text="Examples:" FontAttributes="Italic" />
+                <CollectionView ItemsSource="{Binding Examples}" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding}" FontSize="14" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
 
-        <!-- Next / Back Buttons -->
-        <HorizontalStackLayout Spacing="20">
-            <Button Text="Back" 
+            <!-- Next / Back Buttons -->
+            <HorizontalStackLayout Spacing="20">
+                <Button Text="Back" 
                     FontSize="16"
                     BackgroundColor="#007BFF"
                     TextColor="White"
@@ -52,7 +52,7 @@
                     VerticalOptions="Center"
                     HorizontalOptions="Center"
                     Command="{Binding BackCommand}" />
-            <Button Text="Next" 
+                <Button Text="{Binding NextText}" 
                     FontSize="16"
                     BackgroundColor="#007BFF"
                     TextColor="White"
@@ -60,7 +60,21 @@
                     VerticalOptions="Center"
                     HorizontalOptions="Center"
                     Command="{Binding NextCommand}" />
-        </HorizontalStackLayout>
+            </HorizontalStackLayout>
 
-    </VerticalStackLayout>
+
+        </VerticalStackLayout>
+        <StackLayout
+        IsVisible="{Binding IsBusy}"
+        AbsoluteLayout.LayoutBounds="0,0,1,1"
+        AbsoluteLayout.LayoutFlags="All"
+        BackgroundColor="Gray" Opacity="0.5">
+            <ActivityIndicator
+            IsRunning="{Binding IsBusy}"
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="CenterAndExpand"
+            Color="Black"/>
+        </StackLayout>
+    </AbsoluteLayout>
+
 </ContentPage>
