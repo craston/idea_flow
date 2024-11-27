@@ -5,6 +5,7 @@ using System.Windows.Input;
 using frontend.Models;
 using System.Web;
 using Newtonsoft.Json;
+using frontend.Views;
 
 namespace frontend.ViewModels;
 
@@ -204,8 +205,7 @@ public partial class BrainstormViewModel : ObservableObject
     {
         if (CurrentPromptIndex == 4)
         {
-
-            await Shell.Current.GoToAsync("BrainstormChatPage");
+            await GoToBrainstormChatPage();
             return;
         }
         SaveInput();
@@ -242,9 +242,12 @@ public partial class BrainstormViewModel : ObservableObject
     private async Task Skip()
     {
         SaveInput();
-        await Shell.Current.GoToAsync("BrainstormChatPage");
+        await GoToBrainstormChatPage();
     }
 
-
+    private async Task GoToBrainstormChatPage()
+    {
+        await Shell.Current.GoToAsync(nameof(BrainstormChatPage));
+    }
 
 }
