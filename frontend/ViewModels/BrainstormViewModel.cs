@@ -20,7 +20,6 @@ public partial class BrainstormViewModel : ObservableObject
 
     private readonly static string _baseAddress =
         DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:8000" : "http://localhost:8000";
-    private readonly static string _bsUrl = $"{_baseAddress}/brainstorm/";
     private readonly static string _bs_contextUrl = $"{_baseAddress}/brainstorm_context";
     private readonly static string _bs_goalsUrl = $"{_baseAddress}/brainstorm_goals";
     private readonly static string _bs_preferencesUrl = $"{_baseAddress}/brainstorm_preferences";
@@ -247,7 +246,11 @@ public partial class BrainstormViewModel : ObservableObject
 
     private async Task GoToBrainstormChatPage()
     {
-        await Shell.Current.GoToAsync(nameof(BrainstormChatPage));
+        var navigationParams = new Dictionary<string, object>
+        {
+            ["Input"] = _brainstormInput
+        };
+        await Shell.Current.GoToAsync(nameof(BrainstormChatPage), navigationParams);
     }
 
 }
