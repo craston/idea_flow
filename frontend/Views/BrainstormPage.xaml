@@ -6,45 +6,56 @@
     <ContentPage.BindingContext>
         <viewmodels:BrainstormViewModel />
     </ContentPage.BindingContext>
-    <AbsoluteLayout>
-        <VerticalStackLayout Padding="20">
-            <!-- Prompt -->
-            <Label Text="{Binding CurrentPrompt}" 
-               FontSize="20"
+    <Grid Margin=" 0" Padding="0">
+        <ScrollView VerticalOptions="FillAndExpand" 
+                    HorizontalOptions="FillAndExpand"
+                    Padding="0"
+                    Margin="0">
+            <VerticalStackLayout 
+                Padding="20"
+                HorizontalOptions="Center">
+                <!-- Prompt -->
+                <Frame BackgroundColor="#e0f7fa"
+                       CornerRadius="10"
+                       HasShadow="True">
+
+                    <Label Text="{Binding CurrentPrompt}"
+                          FontSize="20"
+                          FontAttributes="Bold" />
+                </Frame>
+
+                <!-- Entry -->
+                <Entry x:Name="CurrentInput"
+                   Placeholder="Type here..."
+                   FontSize="16"
+                   BackgroundColor="White"
+                   TextColor="#000"
+                   HeightRequest="50"
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="Fill" 
+                   Text="{Binding CurrentInput}"/>
+
+                <!-- Examples -->
+                <Label Text="Examples:" 
+               FontSize="16"
                FontAttributes="Bold" 
                HorizontalTextAlignment="Center" />
 
-            <!-- Entry -->
-            <Entry x:Name="CurrentInput"
-               Placeholder="Type here..."
-               FontSize="16"
-               BackgroundColor="White"
-               TextColor="#000"
-               HeightRequest="50"
-               VerticalOptions="CenterAndExpand"
-               HorizontalOptions="Fill" 
-               Text="{Binding CurrentInput}"/>
+                <StackLayout IsVisible="{Binding Examples.Count}">
+                    <Label Text="Examples:" FontAttributes="Italic" />
+                    <CollectionView ItemsSource="{Binding Examples}" SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Label Text="{Binding}" FontSize="14" />
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
 
-            <!-- Examples -->
-            <Label Text="Examples:" 
-               FontSize="16"
-               FontAttributes="Bold" 
-               HorizontalTextAlignment="Center" />
-
-            <StackLayout IsVisible="{Binding Examples.Count}">
-                <Label Text="Examples:" FontAttributes="Italic" />
-                <CollectionView ItemsSource="{Binding Examples}" SelectionMode="None">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Label Text="{Binding}" FontSize="14" />
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </StackLayout>
-
-            <!-- Next / Back Buttons -->
-            <HorizontalStackLayout Spacing="20">
-                <Button Text="Back" 
+                <!-- Next / Back / Skip Buttons -->
+                <HorizontalStackLayout Spacing="20">
+                    <Button Text="Back"
+                    Margin="0,10,0,0"
                     FontSize="16"
                     BackgroundColor="#007BFF"
                     TextColor="White"
@@ -52,29 +63,51 @@
                     VerticalOptions="Center"
                     HorizontalOptions="Center"
                     Command="{Binding BackCommand}" />
-                <Button Text="{Binding NextText}" 
+                    <Button x:Name="NextButton"
+                    Text="{Binding NextText}"
+                    Margin="0,10,0,0"
                     FontSize="16"
                     BackgroundColor="#007BFF"
                     TextColor="White"
                     CornerRadius="8"
                     VerticalOptions="Center"
                     HorizontalOptions="Center"
-                    Command="{Binding NextCommand}" />
-            </HorizontalStackLayout>
+                    Command="{Binding NextCommand}" 
+                    IsEnabled="{Binding IsNextEnabled}"/>
+                </HorizontalStackLayout>
+                <Button Text="Skip to Brainstorming"
+                    Margin="0,10,0,0"
+                    FontSize="16"
+                    BackgroundColor="Green"
+                    TextColor="White"
+                    CornerRadius="8"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Command="{Binding SkipCommand}"
+                    IsEnabled="{Binding IsNextEnabled}"/>
 
-
-        </VerticalStackLayout>
-        <StackLayout
-        IsVisible="{Binding IsBusy}"
-        AbsoluteLayout.LayoutBounds="0,0,1,1"
-        AbsoluteLayout.LayoutFlags="All"
-        BackgroundColor="Gray" Opacity="0.5">
-            <ActivityIndicator
-            IsRunning="{Binding IsBusy}"
-            HorizontalOptions="CenterAndExpand"
-            VerticalOptions="CenterAndExpand"
-            Color="Black"/>
-        </StackLayout>
-    </AbsoluteLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+        <AbsoluteLayout 
+            IsVisible="{Binding IsBusy}" 
+            Margin="0" 
+            Padding="0" 
+            BackgroundColor="Gray" 
+            Opacity="0.5" >
+            <StackLayout  
+                Margin="0" 
+                Padding="0" 
+                AbsoluteLayout.LayoutBounds="0.5,0.5,AutoSize,AutoSize"
+                AbsoluteLayout.LayoutFlags="PositionProportional" 
+                HorizontalOptions="CenterAndExpand" 
+                VerticalOptions="FillAndExpand" >
+                <ActivityIndicator 
+                    IsRunning="{Binding IsBusy}" 
+                    HorizontalOptions="Center" 
+                    VerticalOptions="Center" 
+                    Color="Black"/>
+            </StackLayout>
+        </AbsoluteLayout>
+    </Grid>
 
 </ContentPage>

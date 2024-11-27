@@ -25,13 +25,16 @@ public partial class BrainstormViewModel : ObservableObject
     private readonly static string _bs_preferencesUrl = $"{_baseAddress}/brainstorm_preferences";
     private readonly static string _bs_tagsUrl = $"{_baseAddress}/brainstorm_tags";
 
-    private List<string> _defaultExamples = ["Vacation Ideas", "Team Building", "Product Ideas"];
+    private readonly static string start = "Start Brainstorming";
+
+    private readonly List<string> _defaultExamples = ["Vacation Ideas", "Team Building", "Product Ideas"];
     private string _currentPrompt = "";
     private string _currentInput = "";
     private string _nextText = "Next";
     private int _currentPromptIndex = 0;
     private List<string> _examples = [];
     private bool _isBusy = false;
+    private bool _isNextEnabled = false;
 
     private BrainstormInput _brainstormInput = new();
     public string CurrentPrompt
@@ -43,7 +46,23 @@ public partial class BrainstormViewModel : ObservableObject
     public string CurrentInput
     {
         get => _currentInput;
-        set => SetProperty(ref _currentInput, value);
+        set
+        {
+            SetProperty(ref _currentInput, value);
+            if (CurrentPromptIndex == 0 && !string.IsNullOrEmpty(CurrentInput))
+            {
+                IsNextEnabled = true;
+            }
+            else if (CurrentPromptIndex > 0)
+            {
+                IsNextEnabled = true;
+            }
+            else
+            {
+                IsNextEnabled = false;
+            }
+
+        }
     }
     public int CurrentPromptIndex
     {
@@ -67,15 +86,21 @@ public partial class BrainstormViewModel : ObservableObject
         get => _isBusy;
         set => SetProperty(ref _isBusy, value);
     }
+
+    public bool IsNextEnabled
+    {
+        get => _isNextEnabled;
+        set => SetProperty(ref _isNextEnabled, value);
+    }
     private void _getPrompt()
     {
         switch (CurrentPromptIndex)
         {
             case 0: CurrentPrompt = "What's the topic?"; break;
-            case 1: CurrentPrompt = "Do you want to provide a context?"; break;
-            case 2: CurrentPrompt = "Your goals?"; break;
-            case 3: CurrentPrompt = "Any preferences?"; break;
-            case 4: CurrentPrompt = "Add tags?"; break;
+            case 1: CurrentPrompt = "Do you want to provide a context? (Optional)"; break;
+            case 2: CurrentPrompt = "Your goals? (Optional)"; break;
+            case 3: CurrentPrompt = "Any preferences? (Optional)"; break;
+            case 4: CurrentPrompt = "Add tags? (Optional)"; break;
         }
     }
 
@@ -173,13 +198,21 @@ public partial class BrainstormViewModel : ObservableObject
     public ICommand NextCommand => new AsyncRelayCommand(Next);
     public ICommand BackCommand => new AsyncRelayCommand(Back);
 
+    public ICommand SkipCommand => new AsyncRelayCommand(Skip);
+
     private async Task Next()
     {
+        if (CurrentPromptIndex == 4)
+        {
+
+            await Shell.Current.GoToAsync("BrainstormChatPage");
+            return;
+        }
         SaveInput();
         CurrentPromptIndex++;
-        if (CurrentPromptIndex == 5)
+        if (CurrentPromptIndex == 4)
         {
-            NextText = "Start Brainstorming";
+            NextText = start;
             
         }
         IsBusy = true;
@@ -206,6 +239,11 @@ public partial class BrainstormViewModel : ObservableObject
         IsBusy = false;
     }
 
+    private async Task Skip()
+    {
+        SaveInput();
+        await Shell.Current.GoToAsync("BrainstormChatPage");
+    }
 
 
 
