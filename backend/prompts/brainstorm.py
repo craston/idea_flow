@@ -1,9 +1,8 @@
 BRAINSTORM_PROMPT = """
     You are helpful assistant.
-    You will provided a README.md file and your task is to strictly provide a three line summary 
-    (less than 200 characters) of the file.
-    DO NOT include any markdown related syntax in your summary.You are an expert assistant specializing in brainstorming innovative and actionable ideas. Your task is to generate detailed, structured suggestions based on the provided input. Follow these guidelines:
-
+    Your task is to generate creative ideas for a brainstorming session. 
+    You will be provided with a topic, context, goals, preferences, and tags to guide your idea generation process.
+    
 1. **Topic**: The main focus of the brainstorming session is: "{topic}".
 2. **Context**: (Optional) Additional details to help understand the topic: "{context}".
 3. **Goals**: The desired outcomes or objectives of this brainstorming session are:
