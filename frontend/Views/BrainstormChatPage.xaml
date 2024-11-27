@@ -1,19 +1,90 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="frontend.Views.BrainstormChatPage"
              xmlns:viewmodels="clr-namespace:frontend.ViewModels"
-             Title="BrainstormChatPage">
-
+             Title="Brainstorming Session">
     <ContentPage.BindingContext>
         <viewmodels:BrainstormChatViewModel />
     </ContentPage.BindingContext>
-    
+    <ScrollView>
+        <VerticalStackLayout Padding="10">
+            <!-- Topic Header -->
+            <Label x:Name="TopicLabel"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="DarkBlue"
+                   HorizontalOptions="Center" 
+                   Margin="0,0,0,20"/>
 
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+            <!-- Ideas Section -->
+            <CollectionView 
+                ItemsSource="{Binding Ideas}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame 
+                            BorderColor="Gray" 
+                            CornerRadius="10" 
+                            Padding="10" 
+                            Margin="0,0,0,20">
+                            <VerticalStackLayout>
+                                <!-- Title -->
+                                <Label Text="{Binding Title}" 
+                                       FontSize="20" 
+                                       FontAttributes="Bold"
+                                       TextColor="Black" 
+                                       Margin="0,0,0,5"/>
+
+                                <!-- Description -->
+                                <Label Text="{Binding Description}" 
+                                       FontSize="16" 
+                                       TextColor="Gray" 
+                                       Margin="0,0,0,10"/>
+
+                                <!-- Highlights -->
+                                <Picker ItemsSource="{Binding Highlights}"
+                                        Title="View Highlights ..."
+                                        FontSize="16"
+                                        TextColor="DarkGray"
+                                        Margin="0,0,0,10" />
+
+                                <!-- Activities -->
+                                <Picker ItemsSource="{Binding Activities}"
+                                        Title="View Activities ..."
+                                        FontSize="16"
+                                        TextColor="DarkGray"
+                                        Margin="0,0,0,10" />
+
+                                <!-- Tips -->
+                                <Picker ItemsSource="{Binding Tips}"
+                                        Title="View Tips ..."
+                                        FontSize="16"
+                                        TextColor="DarkGray"
+                                        Margin="0,0,0,10" />        
+
+                                <!-- Save Button -->
+                                <Button Text="Save Idea"
+                                        BackgroundColor="DarkBlue"
+                                        TextColor="White"
+                                        Margin="0,10,0,0"
+                                        Command="{Binding SaveCommand}" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Question Input Section -->
+            <VerticalStackLayout Margin="0,20,0,0">
+                <Entry x:Name="QuestionEntry"
+                       Placeholder="Ask a question..."
+                       FontSize="16"
+                       Margin="0,0,0,10"/>
+                <Button Text="Submit Question" 
+                        FontSize="16" 
+                        BackgroundColor="DarkBlue" 
+                        TextColor="White"
+                        />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
