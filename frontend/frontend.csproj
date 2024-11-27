@@ -76,6 +76,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\BrainstormChatPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\BrainstormPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -8,6 +8,9 @@
     <DefaultDevice>pixel_5_-_api_34</DefaultDevice>
   </PropertyGroup>
   <ItemGroup>
+    <MauiXaml Update="Views\BrainstormChatPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Views\BrainstormPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
