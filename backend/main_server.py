@@ -55,23 +55,25 @@ def test(question: str):
 @app.get("/brainstorm")
 def brainstorm(
     topic: str,
-    context: Optional[str] = None,
-    goals: Optional[str] = None,
-    preferences: Optional[str] = None,
-    tags: Optional[list[str]] = None,
-    idea_count: Optional[int] = 5,
+    context: str = "",
+    goals: str = "",
+    preferences: str = "",
+    tags: str= "",
+    idea_count: int = 5,
 ):
-    # get the md files for the new urls
     chain = create_bs_chain()
 
-    llm_responses = chain.invoke({
-        "topic": topic,
-        "context": context,
-        "goals": goals,
-        "preferences": preferences,
-        "tags": tags,
-        "idea_count": idea_count,
-    })
+    try:
+        llm_responses = chain.invoke({
+            "topic": topic,
+            "context": context,
+            "goals": goals,
+            "preferences": preferences,
+            "tags": tags,
+            "idea_count": idea_count,
+        })
+    except Exception as e:
+        return {"error": str(e)}
 
     return llm_responses
 
