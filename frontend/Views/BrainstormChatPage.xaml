@@ -24,11 +24,12 @@
                 SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame 
-                            BorderColor="Gray" 
-                            CornerRadius="10" 
+                        <Border 
                             Padding="10" 
                             Margin="0,0,0,20">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10"/>
+                            </Border.StrokeShape>
                             <VerticalStackLayout>
                                 <!-- Title -->
                                 <Label Text="{Binding Title}" 
@@ -44,7 +45,7 @@
                                        Margin="0,0,0,10"/>
 
                             </VerticalStackLayout>
-                        </Frame>
+                        </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
