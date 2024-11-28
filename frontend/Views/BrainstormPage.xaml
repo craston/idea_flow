@@ -15,14 +15,17 @@
                 Padding="20"
                 HorizontalOptions="Center">
                 <!-- Prompt -->
-                <Frame BackgroundColor="#e0f7fa"
-                       CornerRadius="10"
-                       HasShadow="True">
+                <Border BackgroundColor="#e0f7fa"
+                        Padding="10"
+                        Margin="0,0,0,20">
+                    <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                    </Border.StrokeShape>
 
                     <Label Text="{Binding CurrentPrompt}"
                           FontSize="20"
                           FontAttributes="Bold" />
-                </Frame>
+                </Border>
 
                 <!-- Entry -->
                 <Entry x:Name="CurrentInput"

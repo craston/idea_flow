@@ -9,11 +9,12 @@
         <viewModels:BrainstormIdeaViewModel />
     </ContentPage.BindingContext>
     <VerticalStackLayout>
-        <Frame
-            BorderColor="Gray"
-            CornerRadius="10"
+        <Border
             Padding="10"
             Margin="0,0,0,20">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10" />
+            </Border.StrokeShape>
             <StackLayout>
                 <Label
                     Text="{Binding Idea.Title}"
@@ -26,11 +27,12 @@
                     FontSize="12"
                     TextColor="Gray"
                     Margin="0,0,0,10" />
-                <Frame
-                    BorderColor="Gray"
-                    CornerRadius="10"
+                <Border
                     Padding="10"
                     Margin="0,0,0,20">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" />
+                    </Border.StrokeShape>
                     <StackLayout>
                         <Label
                             Text="Highlights"
@@ -51,12 +53,13 @@
                             </CollectionView.ItemTemplate>
                         </CollectionView>
                     </StackLayout>
-                </Frame>
-                <Frame
-                    BorderColor="Gray"
-                    CornerRadius="10"
+                </Border>
+                <Border
                     Padding="10"
                     Margin="0,0,0,20">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" />
+                    </Border.StrokeShape>
                     <StackLayout>
                         <Label
                             Text="Activities"
@@ -77,12 +80,13 @@
                             </CollectionView.ItemTemplate>
                         </CollectionView>
                     </StackLayout>
-                </Frame>
-                <Frame
-                    BorderColor="Gray"
-                    CornerRadius="10"
+                </Border>
+                <Border
                     Padding="10"
                     Margin="0,0,0,20">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" />
+                    </Border.StrokeShape>
                     <StackLayout>
                         <Label
                             Text="Tips"
@@ -103,9 +107,9 @@
                             </CollectionView.ItemTemplate>
                         </CollectionView>
                     </StackLayout>
-                </Frame>
+                </Border>
             </StackLayout>
-        </Frame>
+        </Border>
 
     </VerticalStackLayout>
 </ContentPage>
