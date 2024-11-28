@@ -3,9 +3,10 @@ using System.Web;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
+using CommunityToolkit.Maui.Views;
 using frontend.Models;
 using Newtonsoft.Json;
+using frontend.Views;
 namespace frontend.ViewModels;
 public partial class TestViewModel : ObservableObject
 {
@@ -35,7 +36,8 @@ public partial class TestViewModel : ObservableObject
 
     public ICommand GetAnswer => new AsyncRelayCommand(Answer);
 
-  
+    private readonly SpinnerPopup spinner = new();
+
     private async Task Answer()
     {   
         if (QuestionInput == null) {
@@ -45,7 +47,9 @@ public partial class TestViewModel : ObservableObject
         }
 
         var uri = GetUri(QuestionInput);
+        Application.Current.MainPage.ShowPopup(spinner);
         AnswerOutput = await GetResponse(uri);
+        spinner.Close();
     }
 
     private async Task<string> GetResponse(UriBuilder uri)
