@@ -32,14 +32,14 @@ public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributa
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         var Input = query["Input"] as BrainstormInput;
-        Application.Current.MainPage.ShowPopup(spinner);
+        Application.Current!.Windows![0].Page!.ShowPopup(spinner);
         var Output = await GetBrainStormOutput(Input!);
         spinner.Close();
         Ideas = Output.Generated_ideas;
 
     }
 
-    public ICommand IdeaClickedCommand => new AsyncRelayCommand<IdeaDetail>(IdeaClicked);
+    public ICommand IdeaClickedCommand => new AsyncRelayCommand<IdeaDetail>(IdeaClicked!);
 
 
     private async Task IdeaClicked(IdeaDetail idea)
@@ -77,15 +77,15 @@ public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributa
                 if (!response.IsSuccessStatusCode)
                 {
                     string errorJson = await response.Content.ReadAsStringAsync();
-                    await Application.Current.MainPage.DisplayAlert("Error", errorJson, "OK");
+                    await Application.Current!.Windows![0].Page!.DisplayAlert("Error", errorJson, "OK");
                     return new BrainstormingOutput();
                 }
                 string responseJson = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<BrainstormingOutput>(responseJson);
+                return JsonConvert.DeserializeObject<BrainstormingOutput>(responseJson)!;
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+                await Application.Current!.Windows![0].Page!.DisplayAlert("Error", ex.ToString(), "OK");
                 return new BrainstormingOutput();
             }
         }

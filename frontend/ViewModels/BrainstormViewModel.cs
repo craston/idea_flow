@@ -179,15 +179,15 @@ public partial class BrainstormViewModel : ObservableObject
                 if (!response.IsSuccessStatusCode)
                 {
                     string errorJson = await response.Content.ReadAsStringAsync();
-                    await Application.Current.MainPage.DisplayAlert("Error", errorJson, "OK");
+                    await Application.Current!.Windows![0].Page!.DisplayAlert("Error", errorJson, "OK");
                     return new List<string>();
                 }
                 string responseJson = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<BrainstormExamplesOuput>(responseJson).Examples;
+                return JsonConvert.DeserializeObject<BrainstormExamplesOuput>(responseJson)!.Examples;
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+                await Application.Current!.Windows![0].Page!.DisplayAlert("Error", ex.ToString(), "OK");
                 return new List<string>();
             }
         }
@@ -199,7 +199,7 @@ public partial class BrainstormViewModel : ObservableObject
 
     private async Task Next()
     {
-        Application.Current.MainPage.ShowPopup(spinner);
+        Application.Current!.Windows![0].Page!.ShowPopup(spinner);
         if (CurrentPromptIndex == 4)
         {
             await GoToBrainstormChatPage();
@@ -220,14 +220,14 @@ public partial class BrainstormViewModel : ObservableObject
 
     private async Task Back()
     {
-        Application.Current.MainPage.ShowPopup(spinner);
+        Application.Current!.Windows![0].Page!.ShowPopup(spinner);
         CurrentPromptIndex--;
         await UpdateExamples();
         _getPrompt();
         switch(CurrentPromptIndex)
         {
-            case 0: CurrentInput = _brainstormInput.Topic; break;
-            case 1: CurrentInput = _brainstormInput.Context; break;
+            case 0: CurrentInput = _brainstormInput.Topic!; break;
+            case 1: CurrentInput = _brainstormInput.Context!; break;
             case 2: CurrentInput = string.Join(",", _brainstormInput.Goals); break;
             case 3: CurrentInput = string.Join(",", _brainstormInput.Preferences); break;
             case 4: CurrentInput = string.Join(",", _brainstormInput.Tags); break;

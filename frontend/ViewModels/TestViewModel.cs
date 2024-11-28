@@ -42,12 +42,12 @@ public partial class TestViewModel : ObservableObject
     {   
         if (QuestionInput == null) {
             // Display alert
-            await Application.Current.MainPage.DisplayAlert("Error", "Please enter a question", "OK");
+            await Application.Current!.Windows![0].Page!.DisplayAlert("Error", "Please enter a question", "OK");
             return;
         }
 
         var uri = GetUri(QuestionInput);
-        Application.Current.MainPage.ShowPopup(spinner);
+        Application.Current!.Windows![0].Page!.ShowPopup(spinner);
         AnswerOutput = await GetResponse(uri);
         spinner.Close();
     }
@@ -62,7 +62,7 @@ public partial class TestViewModel : ObservableObject
                 if (!response.IsSuccessStatusCode)
                 {
                     string errorJson = await response.Content.ReadAsStringAsync();
-                    await Application.Current.MainPage.DisplayAlert("Error", errorJson, "OK");
+                    await Application.Current!.Windows![0].Page!.DisplayAlert("Error", errorJson, "OK");
                     return "";
                 }
 
@@ -73,7 +73,7 @@ public partial class TestViewModel : ObservableObject
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "OK");
+                await Application.Current!.Windows![0].Page!.DisplayAlert("Error", ex.ToString(), "OK");
                 return AnswerOutput;
             }
         }
