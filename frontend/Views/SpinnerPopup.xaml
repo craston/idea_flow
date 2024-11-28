@@ -1,0 +1,24 @@
+<toolkit:Popup
+    x:Class="frontend.Views.SpinnerPopup"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    CanBeDismissedByTappingOutsideOfPopup="False"
+    >
+    <AbsoluteLayout>
+        <StackLayout  
+        Margin="0" 
+        Padding="0" 
+        AbsoluteLayout.LayoutBounds="0.5,0.5,AutoSize,AutoSize"
+        AbsoluteLayout.LayoutFlags="PositionProportional" 
+        HorizontalOptions="CenterAndExpand" 
+        VerticalOptions="FillAndExpand">
+            <ActivityIndicator 
+            IsRunning="True" 
+            HorizontalOptions="Center" 
+            VerticalOptions="Center" 
+            Color="Black"/>
+
+        </StackLayout>
+    </AbsoluteLayout>
+</toolkit:Popup>

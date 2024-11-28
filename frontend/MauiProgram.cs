@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Core.Handlers;
+using frontend.Views;
+using Microsoft.Extensions.Logging;
 
 namespace frontend
 {
@@ -9,6 +12,11 @@ namespace frontend
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
+                .ConfigureMauiHandlers(handlers =>
+                {
+                    handlers.AddHandler<SpinnerPopup, PopupHandler>();
+                })
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
