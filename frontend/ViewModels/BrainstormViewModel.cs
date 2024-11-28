@@ -209,14 +209,14 @@ public partial class BrainstormViewModel : ObservableObject
         }
         SaveInput();
         CurrentPromptIndex++;
-        if (CurrentPromptIndex == 4)
-        {
-            NextText = start;
-            
-        }
         IsBusy = true;
         await UpdateExamples();
         _getPrompt();
+        if (CurrentPromptIndex == 4)
+        {
+            NextText = start;
+
+        }
         CurrentInput = "";
         IsBusy = false;
     }
