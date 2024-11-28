@@ -7,6 +7,7 @@ using System.Windows.Input;
 
 using frontend.Models;
 using frontend.Views;
+using CommunityToolkit.Maui.Views;
 namespace frontend.ViewModels;
 public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributable
 {
@@ -14,6 +15,8 @@ public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributa
     {
 
     }
+
+    SpinnerPopup spinner = new();
 
     private readonly static string _baseAddress =
         DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:8000" : "http://localhost:8000";
@@ -29,8 +32,9 @@ public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributa
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         var Input = query["Input"] as BrainstormInput;
-        var Output = await GetBrainStormOutput(Input);
-
+        Application.Current.MainPage.ShowPopup(spinner);
+        var Output = await GetBrainStormOutput(Input!);
+        spinner.Close();
         Ideas = Output.Generated_ideas;
 
     }
