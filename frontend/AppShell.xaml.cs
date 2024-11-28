@@ -11,6 +11,7 @@ namespace frontend
             Routing.RegisterRoute("PuzzlesPage", typeof(PuzzlesPage));
             Routing.RegisterRoute("TestPage", typeof(TestPage));
             Routing.RegisterRoute("BrainstormChatPage", typeof(BrainstormChatPage));
+            Routing.RegisterRoute("BrainstormIdeaPage", typeof(BrainstormIdeaPage));
         }
     }
 }

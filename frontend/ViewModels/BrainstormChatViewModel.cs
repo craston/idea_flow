@@ -2,8 +2,11 @@
 using Newtonsoft.Json;
 using System.Web;
 
-using frontend.Models;
+using CommunityToolkit.Mvvm.Input;
+using System.Windows.Input;
 
+using frontend.Models;
+using frontend.Views;
 namespace frontend.ViewModels;
 public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributable
 {
@@ -16,20 +19,6 @@ public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributa
         DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:8000" : "http://localhost:8000";
     private readonly static string _bsUrl = $"{_baseAddress}/brainstorm/";
 
-    private BrainstormInput? _input;
-    public BrainstormInput Input
-    {
-        get => _input;
-        set => SetProperty(ref _input, value);
-    }
-
-    private BrainstormingOutput? _output;
-    public BrainstormingOutput Output
-    {
-        get => _output;
-        set => SetProperty(ref _output, value);
-    }
-
     private List<IdeaDetail> _ideas = [];
 
     public List<IdeaDetail> Ideas
@@ -39,15 +28,27 @@ public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributa
     }
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        Input = query["Input"] as BrainstormInput;
-
-        Output = await GetBrainStormOutput();
+        var Input = query["Input"] as BrainstormInput;
+        var Output = await GetBrainStormOutput(Input);
 
         Ideas = Output.Generated_ideas;
 
     }
 
-    private async Task<BrainstormingOutput> GetBrainStormOutput()
+    public ICommand IdeaClickedCommand => new AsyncRelayCommand<IdeaDetail>(IdeaClicked);
+
+
+    private async Task IdeaClicked(IdeaDetail idea)
+    {
+        var navigationParams = new Dictionary<string, object>
+        {
+            ["Idea"]= idea 
+        };
+
+        await Shell.Current.GoToAsync(nameof(BrainstormIdeaPage), navigationParams);
+        
+    }
+    private async Task<BrainstormingOutput> GetBrainStormOutput(BrainstormInput Input)
     {
         UriBuilder uri = new(_bsUrl);
         var query = HttpUtility.ParseQueryString(uri.Query);
