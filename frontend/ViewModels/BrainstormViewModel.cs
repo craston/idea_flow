@@ -5,6 +5,8 @@ using System.Windows.Input;
 using frontend.Models;
 using System.Web;
 using Newtonsoft.Json;
+using CommunityToolkit.Maui.Views;
+
 using frontend.Views;
 
 namespace frontend.ViewModels;
@@ -33,8 +35,9 @@ public partial class BrainstormViewModel : ObservableObject
     private string _nextText = "Next";
     private int _currentPromptIndex = 0;
     private List<string> _examples = [];
-    private bool _isBusy = false;
     private bool _isNextEnabled = false;
+
+    SpinnerPopup spinner = new();
 
     private BrainstormInput _brainstormInput = new();
     public string CurrentPrompt
@@ -79,12 +82,6 @@ public partial class BrainstormViewModel : ObservableObject
     {
         get => _nextText;
         set => SetProperty(ref _nextText, value);
-    }
-
-    public bool IsBusy
-    {
-        get => _isBusy;
-        set => SetProperty(ref _isBusy, value);
     }
 
     public bool IsNextEnabled
@@ -202,6 +199,7 @@ public partial class BrainstormViewModel : ObservableObject
 
     private async Task Next()
     {
+        Application.Current.MainPage.ShowPopup(spinner);
         if (CurrentPromptIndex == 4)
         {
             await GoToBrainstormChatPage();
@@ -209,7 +207,6 @@ public partial class BrainstormViewModel : ObservableObject
         }
         SaveInput();
         CurrentPromptIndex++;
-        IsBusy = true;
         await UpdateExamples();
         _getPrompt();
         if (CurrentPromptIndex == 4)
@@ -218,13 +215,13 @@ public partial class BrainstormViewModel : ObservableObject
 
         }
         CurrentInput = "";
-        IsBusy = false;
+        spinner.Close();
     }
 
     private async Task Back()
     {
+        Application.Current.MainPage.ShowPopup(spinner);
         CurrentPromptIndex--;
-        IsBusy = true;
         await UpdateExamples();
         _getPrompt();
         switch(CurrentPromptIndex)
@@ -235,7 +232,7 @@ public partial class BrainstormViewModel : ObservableObject
             case 3: CurrentInput = string.Join(",", _brainstormInput.Preferences); break;
             case 4: CurrentInput = string.Join(",", _brainstormInput.Tags); break;
         }
-        IsBusy = false;
+        spinner.Close();
     }
 
     private async Task Skip()
