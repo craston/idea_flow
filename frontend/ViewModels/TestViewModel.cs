@@ -4,7 +4,6 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using frontend.Views;
 using frontend.Models;
 using Newtonsoft.Json;
 namespace frontend.ViewModels;
@@ -18,7 +17,7 @@ public partial class TestViewModel : ObservableObject
         DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:8000" : "http://localhost:8000";
     public static string TestUrl = $"{BaseAddress}/test/";
 
-    private string questionInput;
+    private string questionInput="";
     // set default value for AnswerOutput
     private string answerOutput = "Answer will appear here";
 
@@ -45,11 +44,11 @@ public partial class TestViewModel : ObservableObject
             return;
         }
 
-        var uri = _GetUri(QuestionInput);
-        AnswerOutput = await _GetResponse(uri);
+        var uri = GetUri(QuestionInput);
+        AnswerOutput = await GetResponse(uri);
     }
 
-    private async Task<string> _GetResponse(UriBuilder uri)
+    private async Task<string> GetResponse(UriBuilder uri)
     {
         using (var httpClient = new HttpClient())
         {
@@ -66,7 +65,7 @@ public partial class TestViewModel : ObservableObject
                 string responseJson = await response.Content.ReadAsStringAsync();
                 // convert to Json object
                 var responseObj = JsonConvert.DeserializeObject<TestOutput>(responseJson);
-                return responseObj.Answer;
+                return responseObj!.Answer;
             }
             catch (Exception ex)
             {
@@ -76,7 +75,7 @@ public partial class TestViewModel : ObservableObject
         }
 
     }
-    private UriBuilder _GetUri(string question)
+    private static UriBuilder GetUri(string question)
     {
         UriBuilder uri = new(TestUrl);
         var query = HttpUtility.ParseQueryString(uri.Query);
