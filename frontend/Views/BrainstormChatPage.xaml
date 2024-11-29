@@ -31,23 +31,38 @@
                                 <RoundRectangle CornerRadius="10"/>
                             </Border.StrokeShape>
                             <VerticalStackLayout>
-                                <!-- Title -->
-                                <Label Text="{Binding Title}" 
-                                       FontSize="20" 
-                                       FontAttributes="Bold"
-                                       TextColor="Black" 
-                                       Margin="0,0,0,5"/>
+                                <!-- Title and Save Checkbox -->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
 
+                                    <!-- Title -->
+                                    <Label Grid.Column="0"
+                                           
+                                           Text="{Binding Title}" 
+                                           FontSize="22" 
+                                           FontAttributes="Bold"
+                                           TextColor="#212121" 
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Start" />
+                                    <!-- Save Toggle Icon -->
+                                    <ImageButton
+                                        Source="{Binding ImgSource}"
+                                        Command="{Binding ToggleSaveCommand}"
+                                        BackgroundColor="Transparent"
+                                        VerticalOptions="Center"
+                                        HorizontalOptions="End"
+                                        HeightRequest="12"
+                                        WidthRequest="12" />
+                                </Grid>
                                 <!-- Description -->
                                 <Label Text="{Binding Description}" 
-                                       FontSize="16" 
-                                       TextColor="Gray" 
-                                       Margin="0,0,0,10"/>
-                                
-                                <!-- Save Button -->
-                                <Button Text="Save"
-                                        FontSize="16"
+                                        FontSize="16" 
+                                        TextColor="Gray" 
                                         Margin="0,0,0,10"/>
+
 
                             </VerticalStackLayout>
                         </Border>
