@@ -98,6 +98,7 @@ public partial class BrainstormViewModel : ObservableObject
             case 2: CurrentPrompt = "Your goals? (Optional)"; break;
             case 3: CurrentPrompt = "Any preferences? (Optional)"; break;
             case 4: CurrentPrompt = "Add tags? (Optional)"; break;
+            case 5: CurrentPrompt = "Number of ideas to generate?"; break;
         }
     }
 
@@ -110,6 +111,7 @@ public partial class BrainstormViewModel : ObservableObject
             case 2: _brainstormInput.Goals = new List<string>(CurrentInput.Split(',')); break;
             case 3: _brainstormInput.Preferences.Add(CurrentInput); break;
             case 4: _brainstormInput.Tags.Add(CurrentInput); break;
+            case 5: _brainstormInput.Idea_count = Int32.Parse(CurrentInput); break;
         }
     }
 
@@ -122,6 +124,7 @@ public partial class BrainstormViewModel : ObservableObject
             case 2: Examples = await GetGoalsExamples(); break;
             case 3: Examples = await GetPreferencesExamples(); break;
             case 4: Examples = await GetTagsExamples(); break;
+            case 5: Examples = []; break;
         }
     }
 
@@ -173,6 +176,7 @@ public partial class BrainstormViewModel : ObservableObject
     {
         using (var httpClient = new HttpClient())
         {
+            httpClient.Timeout = TimeSpan.FromMinutes(10);
             try
             {
                 var response = await httpClient.GetAsync(url);
@@ -194,22 +198,21 @@ public partial class BrainstormViewModel : ObservableObject
     }
     public ICommand NextCommand => new AsyncRelayCommand(Next);
     public ICommand BackCommand => new AsyncRelayCommand(Back);
-
     public ICommand SkipCommand => new AsyncRelayCommand(Skip);
 
     private async Task Next()
     {
         Application.Current!.Windows![0].Page!.ShowPopup(spinner);
-        if (CurrentPromptIndex == 4)
+        SaveInput();
+        if (CurrentPromptIndex == 5)
         {
             await GoToBrainstormChatPage();
             return;
         }
-        SaveInput();
         CurrentPromptIndex++;
         await UpdateExamples();
         _getPrompt();
-        if (CurrentPromptIndex == 4)
+        if (CurrentPromptIndex == 5)
         {
             NextText = start;
 
@@ -231,6 +234,7 @@ public partial class BrainstormViewModel : ObservableObject
             case 2: CurrentInput = string.Join(",", _brainstormInput.Goals); break;
             case 3: CurrentInput = string.Join(",", _brainstormInput.Preferences); break;
             case 4: CurrentInput = string.Join(",", _brainstormInput.Tags); break;
+            case 5: CurrentInput = _brainstormInput.Idea_count.ToString(); break;
         }
         spinner.Close();
     }

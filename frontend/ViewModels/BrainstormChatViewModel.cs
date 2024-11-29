@@ -71,6 +71,7 @@ public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributa
     {
         using (var httpClient = new HttpClient())
         {
+            httpClient.Timeout = TimeSpan.FromMinutes(10);
             try
             {
                 var response = await httpClient.GetAsync(url);
