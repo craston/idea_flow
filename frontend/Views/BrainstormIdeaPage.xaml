@@ -26,24 +26,31 @@
                 <RoundRectangle CornerRadius="10" />
             </Border.StrokeShape>
             <StackLayout>
-                <HorizontalStackLayout VerticalOptions="Center">
-                    <Label
-                        Text="{Binding Idea.Title}"
-                        FontSize="20"
+                <!-- Title and Save Checkbox -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Title -->
+                    <Label Grid.Column="0"
+                        Text="{Binding Idea.Title}" 
+                        FontSize="22" 
                         FontAttributes="Bold"
-                        TextColor="Black"
-                        VerticalOptions="Center" />
-                    <CheckBox
-                        IsChecked="{Binding Idea.IsSaved}"
+                        TextColor="#212121" 
                         VerticalOptions="Center"
-                        Margin="10,0,0,0" />
-                    <Label
-                        Text="Save"
-                        FontSize="16"
-                        VerticalOptions="Center"
-                        TextColor="Black"
-                        Margin="5,0,0,0" />     
-                </HorizontalStackLayout>
+                        HorizontalOptions="Start" />    
+                    <!-- Save Toggle Icon -->
+                    <ImageButton
+                         Source="{Binding Idea.ImgSource}"
+                         Command="{Binding Idea.ToggleSaveCommand}"
+                         BackgroundColor="Transparent"
+                         VerticalOptions="Center"
+                         HorizontalOptions="End"
+                         HeightRequest="12"
+                         WidthRequest="12" />   
+                </Grid>
                 <Label
                     Text="{Binding Idea.Description}"
                     FontSize="12"
