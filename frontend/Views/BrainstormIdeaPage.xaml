@@ -161,7 +161,10 @@
                 <CollectionView ItemsSource="{Binding Messages}" VerticalOptions="End">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame Padding="10" Margin="5" CornerRadius="10" BackgroundColor="LightGray">
+                            <Frame Padding="10" 
+                                   Margin="5" 
+                                   CornerRadius="10" 
+                                   BackgroundColor="{Binding IsUserMessage, Converter={StaticResource BooleanToColorConverter}}">
                                 <Label Text="{Binding Content}" 
                                        FontSize="14" 
                                        TextColor="Black"
