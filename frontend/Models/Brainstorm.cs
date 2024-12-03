@@ -15,8 +15,8 @@ namespace frontend.Models
 
     }
 
-    public partial class IdeaDetail: ObservableObject
-    { 
+    public partial class IdeaDetail : ObservableObject
+    {
         public string? Title { get; set; }
         public string? Description { get; set; }
         public List<string> Highlights { get; set; } = [];
@@ -58,4 +58,18 @@ namespace frontend.Models
     {
         public List<string> Examples { get; set; } = [];
     }
+
+    public class ChatMessage
+    {
+        public string? Content { get; set; } // The text of the message
+        public bool IsUserMessage { get; set; } // True if the message is from the user
+        public DateTime Timestamp { get; set; } // When the message was sent or received
+    }
+
+    public class IdeaRefineChat
+    {
+        public List<ChatMessage> Messages { get; set; } = [];
+
+    }
+
 }
