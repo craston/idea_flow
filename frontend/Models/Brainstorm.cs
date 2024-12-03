@@ -15,7 +15,7 @@ namespace frontend.Models
 
     }
 
-    public class IdeaDetail: ObservableObject
+    public partial class IdeaDetail: ObservableObject
     { 
         public string? Title { get; set; }
         public string? Description { get; set; }
@@ -37,6 +37,11 @@ namespace frontend.Models
             set => SetProperty(ref _imgSource, value);
         }
         public ICommand ToggleSaveCommand => new RelayCommand(ToggleSave);
+
+        public IdeaDetail()
+        {
+            IsSaved = false;
+        }
         private void ToggleSave()
         {
             IsSaved = !IsSaved;
