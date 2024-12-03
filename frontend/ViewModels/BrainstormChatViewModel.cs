@@ -39,9 +39,11 @@ public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributa
     private BrainstormingOutput Output = new ();
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        var Input = query["Input"] as BrainstormInput;
+        var Input = query.TryGetValue("Input", out var input) ? (BrainstormInput)input! : new BrainstormInput();
         Application.Current!.Windows![0].Page!.ShowPopup(spinner);
-        Output = await GetBrainStormOutput(Input!);
+
+        Output = query.TryGetValue("Output", out var output) ? (BrainstormingOutput)output! : await GetBrainStormOutput(Input!);
+
         spinner.Close();
         Ideas = Output.Generated_ideas;
         Topic = "Generated Ideas for " + Output!.Topic;

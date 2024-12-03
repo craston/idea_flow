@@ -8,6 +8,9 @@
     <ContentPage.BindingContext>
         <viewModels:BrainstormIdeaViewModel />
     </ContentPage.BindingContext>
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}"/>
+    </Shell.BackButtonBehavior>
     <VerticalStackLayout>
         <Label 
             Text="{Binding Topic}"
