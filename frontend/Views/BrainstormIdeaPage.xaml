@@ -11,134 +11,136 @@
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding BackCommand}"/>
     </Shell.BackButtonBehavior>
-    <VerticalStackLayout>
-        <Label 
+    <ScrollView>
+        <VerticalStackLayout>
+            <Label 
             Text="{Binding Topic}"
             FontSize="24"
             FontAttributes="Bold"
             TextColor="DarkBlue"
             HorizontalOptions="Center" 
             Margin="0,0,0,20"/>
-        <Border
+            <Border
             Padding="10"
             Margin="0,0,0,20">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="10" />
-            </Border.StrokeShape>
-            <StackLayout>
-                <!-- Title and Save Checkbox -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
+                <StackLayout>
+                    <!-- Title and Save Checkbox -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                    <!-- Title -->
-                    <Label Grid.Column="0"
+                        <!-- Title -->
+                        <Label Grid.Column="0"
                         Text="{Binding Idea.Title}" 
                         FontSize="22" 
                         FontAttributes="Bold"
                         TextColor="#212121" 
                         VerticalOptions="Center"
-                        HorizontalOptions="Start" />    
-                    <!-- Save Toggle Icon -->
-                    <ImageButton
+                        HorizontalOptions="Start" />
+                        <!-- Save Toggle Icon -->
+                        <ImageButton
                          Source="{Binding Idea.ImgSource}"
                          Command="{Binding Idea.ToggleSaveCommand}"
                          BackgroundColor="Transparent"
                          VerticalOptions="Center"
                          HorizontalOptions="End"
                          HeightRequest="12"
-                         WidthRequest="12" />   
-                </Grid>
-                <Label
+                         WidthRequest="12" />
+                    </Grid>
+                    <Label
                     Text="{Binding Idea.Description}"
                     FontSize="12"
                     TextColor="Gray"
                     Margin="0,0,0,10" />
-                <Border
+                    <Border
                     Padding="10"
                     Margin="0,0,0,20">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="10" />
-                    </Border.StrokeShape>
-                    <StackLayout>
-                        <Label
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+                        <StackLayout>
+                            <Label
                             Text="Highlights"
                             FontSize="14"
                             FontAttributes="Bold"
                             TextColor="Black"
                             Margin="0,0,0,5" />
-                        <CollectionView
+                            <CollectionView
                             ItemsSource="{Binding Idea.Highlights}">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Label
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label
                                         Text="{Binding .}"
                                         FontSize="12"
                                         TextColor="Black"
                                         Margin="0,0,0,10" />
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </StackLayout>
-                </Border>
-                <Border
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </StackLayout>
+                    </Border>
+                    <Border
                     Padding="10"
                     Margin="0,0,0,20">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="10" />
-                    </Border.StrokeShape>
-                    <StackLayout>
-                        <Label
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+                        <StackLayout>
+                            <Label
                             Text="Activities"
                             FontSize="14"
                             FontAttributes="Bold"
                             TextColor="Black"
                             Margin="0,0,0,5" />
-                        <CollectionView
+                            <CollectionView
                             ItemsSource="{Binding Idea.Activities}">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Label
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label
                                         Text="{Binding .}"
                                         FontSize="12"
                                         TextColor="Black"
                                         Margin="0,0,0,10" />
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </StackLayout>
-                </Border>
-                <Border
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </StackLayout>
+                    </Border>
+                    <Border
                     Padding="10"
                     Margin="0,0,0,20">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="10" />
-                    </Border.StrokeShape>
-                    <StackLayout>
-                        <Label
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+                        <StackLayout>
+                            <Label
                             Text="Tips"
                             FontSize="14"
                             FontAttributes="Bold"
                             TextColor="Black"
                             Margin="0,0,0,5" />
-                        <CollectionView
+                            <CollectionView
                             ItemsSource="{Binding Idea.Tips}">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Label
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label
                                 Text="{Binding .}"
                                 FontSize="12"
                                 TextColor="Black"
                                 Margin="0,0,0,10" />
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </StackLayout>
-                </Border>
-            </StackLayout>
-        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </StackLayout>
+                    </Border>
+                </StackLayout>
+            </Border>
 
-    </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
