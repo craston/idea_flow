@@ -9,7 +9,7 @@
     <ScrollView>
         <VerticalStackLayout Padding="10">
             <!-- Topic Header -->
-            <Label x:Name="TopicLabel"
+            <Label Text="{Binding Topic}"
                    FontSize="24"
                    FontAttributes="Bold"
                    TextColor="DarkBlue"
@@ -40,7 +40,6 @@
 
                                     <!-- Title -->
                                     <Label Grid.Column="0"
-                                           
                                            Text="{Binding Title}" 
                                            FontSize="22" 
                                            FontAttributes="Bold"

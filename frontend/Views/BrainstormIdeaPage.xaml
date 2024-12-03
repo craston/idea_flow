@@ -9,6 +9,13 @@
         <viewModels:BrainstormIdeaViewModel />
     </ContentPage.BindingContext>
     <VerticalStackLayout>
+        <Label 
+            Text="{Binding Topic}"
+            FontSize="24"
+            FontAttributes="Bold"
+            TextColor="DarkBlue"
+            HorizontalOptions="Center" 
+            Margin="0,0,0,20"/>
         <Border
             Padding="10"
             Margin="0,0,0,20">
@@ -16,12 +23,24 @@
                 <RoundRectangle CornerRadius="10" />
             </Border.StrokeShape>
             <StackLayout>
-                <Label
-                    Text="{Binding Idea.Title}"
-                    FontSize="16"
-                    FontAttributes="Bold"
-                    TextColor="Black"
-                    Margin="0,0,0,5" />
+                <HorizontalStackLayout VerticalOptions="Center">
+                    <Label
+                        Text="{Binding Idea.Title}"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        VerticalOptions="Center" />
+                    <CheckBox
+                        IsChecked="{Binding Idea.IsSaved}"
+                        VerticalOptions="Center"
+                        Margin="10,0,0,0" />
+                    <Label
+                        Text="Save"
+                        FontSize="16"
+                        VerticalOptions="Center"
+                        TextColor="Black"
+                        Margin="5,0,0,0" />     
+                </HorizontalStackLayout>
                 <Label
                     Text="{Binding Idea.Description}"
                     FontSize="12"

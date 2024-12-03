@@ -24,19 +24,27 @@ public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributa
 
     private List<IdeaDetail> _ideas = [];
 
+    private string _topic = "";
     public List<IdeaDetail> Ideas
     {
         get => _ideas;
         set => SetProperty(ref _ideas, value);
     }
+    public string Topic
+    {
+        get => _topic;
+        set => SetProperty(ref _topic, value);
+    }
+
+    private BrainstormingOutput Output = new ();
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         var Input = query["Input"] as BrainstormInput;
         Application.Current!.Windows![0].Page!.ShowPopup(spinner);
-        var Output = await GetBrainStormOutput(Input!);
+        Output = await GetBrainStormOutput(Input!);
         spinner.Close();
         Ideas = Output.Generated_ideas;
-
+        Topic = "Generated Ideas for " + Output!.Topic;
     }
 
     public ICommand IdeaClickedCommand => new AsyncRelayCommand<IdeaDetail>(IdeaClicked!);
@@ -46,7 +54,8 @@ public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributa
     {
         var navigationParams = new Dictionary<string, object>
         {
-            ["Idea"]= idea 
+            ["Idea"]= idea,
+            ["Brainstorm_output"] = Output
         };
 
         await Shell.Current.GoToAsync(nameof(BrainstormIdeaPage), navigationParams);
