@@ -17,6 +17,7 @@ from backend.models.brainstorm import (
     create_bs_tags_chain,
 )
 from backend.models.test import create_test_chain
+from backend.models.riddle import create_riddle_chain
 from schemas import IdeaDetail
 
 _LOGGER = logging.getLogger("main:server")
@@ -180,6 +181,20 @@ def brainstorm_idea_chat(
                 "tips": idea.tips,
                 "question": question,
             }
+        )
+    except Exception as e:
+        return {"error": str(e)}
+
+    return llm_response
+
+
+@app.get("/gen_riddle")
+def gen_riddle():
+    chain = create_riddle_chain()
+
+    try:
+        llm_response = chain.invoke(
+            {},
         )
     except Exception as e:
         return {"error": str(e)}
