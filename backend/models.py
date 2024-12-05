@@ -1,18 +1,29 @@
 import logging
+import os
 from pathlib import Path
 
+from dotenv import load_dotenv
 from langchain_community.cache import SQLiteCache
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables.base import RunnableSerializable
 from langchain_ollama import OllamaLLM
 
-import os
-from dotenv import load_dotenv
-
-from schemas import BrainstormingOutput, LLMModel, TestOutput, BrainstormingExamplesOutput
-from backend.prompts.brainstorm import BRAINSTORM_GOALS_PROMPT, BRAINSTORM_PREFERENCES_PROMPT, BRAINSTORM_PROMPT, BRAINSTORM_CONTEXT_PROMPT, BRAINSTORM_TAGS_PROMPT
-from backend.prompts.test import TEST_PROMPT 
+from backend.prompts.brainstorm import (
+    BRAINSTORM_CONTEXT_PROMPT,
+    BRAINSTORM_GOALS_PROMPT,
+    BRAINSTORM_IDEA_CHAT_PROMPT,
+    BRAINSTORM_PREFERENCES_PROMPT,
+    BRAINSTORM_PROMPT,
+    BRAINSTORM_TAGS_PROMPT,
+)
+from backend.prompts.test import TEST_PROMPT
+from schemas import (
+    BrainstormingExamplesOutput,
+    BrainstormingOutput,
+    LLMModel,
+    TestOutput,
+)
 
 load_dotenv()
 
@@ -28,9 +39,11 @@ CONTEXT = {
     LLMModel.gemma2_7b: 8192,
 }
 
-def _create_chain(prompt: PromptTemplate,
-                  output_parser: JsonOutputParser,
-                 ) -> RunnableSerializable:
+
+def _create_chain(
+    prompt: PromptTemplate,
+    output_parser: JsonOutputParser,
+) -> RunnableSerializable:
     CACHE_DIR.mkdir(exist_ok=True, parents=True)
 
     model = OllamaLLM(
@@ -51,7 +64,6 @@ def _create_chain(prompt: PromptTemplate,
 
 
 def create_test_chain() -> RunnableSerializable:
-
     parser = JsonOutputParser(pydantic_object=TestOutput)
 
     prompt = PromptTemplate(
@@ -62,17 +74,25 @@ def create_test_chain() -> RunnableSerializable:
 
     return _create_chain(prompt, parser)
 
+
 def create_bs_chain() -> RunnableSerializable:
-   
     parser = JsonOutputParser(pydantic_object=BrainstormingOutput)
 
     prompt = PromptTemplate(
         template=BRAINSTORM_PROMPT,
-        input_variables=["topic", "context", "goals", "preferences", "tags", "idea_count"],
+        input_variables=[
+            "topic",
+            "context",
+            "goals",
+            "preferences",
+            "tags",
+            "idea_count",
+        ],
         partial_variables={"format_instructions": parser.get_format_instructions()},
     )
 
     return _create_chain(prompt, parser)
+
 
 def create_bs_context_chain() -> RunnableSerializable:
     parser = JsonOutputParser(pydantic_object=BrainstormingExamplesOutput)
@@ -84,7 +104,8 @@ def create_bs_context_chain() -> RunnableSerializable:
     )
 
     return _create_chain(prompt, parser)
-    
+
+
 def create_bs_goals_chain() -> RunnableSerializable:
     parser = JsonOutputParser(pydantic_object=BrainstormingExamplesOutput)
 
@@ -95,6 +116,7 @@ def create_bs_goals_chain() -> RunnableSerializable:
     )
 
     return _create_chain(prompt, parser)
+
 
 def create_bs_preferences_chain() -> RunnableSerializable:
     parser = JsonOutputParser(pydantic_object=BrainstormingExamplesOutput)
@@ -107,12 +129,25 @@ def create_bs_preferences_chain() -> RunnableSerializable:
 
     return _create_chain(prompt, parser)
 
+
 def create_bs_tags_chain() -> RunnableSerializable:
     parser = JsonOutputParser(pydantic_object=BrainstormingExamplesOutput)
 
     prompt = PromptTemplate(
         template=BRAINSTORM_TAGS_PROMPT,
         input_variables=["topic", "context", "goals", "preferences"],
+        partial_variables={"format_instructions": parser.get_format_instructions()},
+    )
+
+    return _create_chain(prompt, parser)
+
+
+def create_bs_chat_chain() -> RunnableSerializable:
+    parser = JsonOutputParser(pydantic_object=TestOutput)
+
+    prompt = PromptTemplate(
+        template=BRAINSTORM_IDEA_CHAT_PROMPT,
+        input_variables=["title", "description", "highlights", "activities", "tips"],
         partial_variables={"format_instructions": parser.get_format_instructions()},
     )
 
