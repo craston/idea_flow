@@ -1,24 +1,23 @@
 from __future__ import annotations
 
-from contextlib import asynccontextmanager
 import logging
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-
+from pydantic import Field
 from pydantic.networks import IPv4Address
 from pydantic_settings import BaseSettings
-from pydantic import Field
 
-from models import create_bs_chain
-from models import (
+from backend.models.brainstorm import (
+    create_bs_chain,
+    create_bs_chat_chain,
     create_bs_context_chain,
     create_bs_goals_chain,
     create_bs_preferences_chain,
     create_bs_tags_chain,
-    create_test_chain,
 )
-from models import create_bs_chat_chain
-from schemas import ChatHistory, IdeaDetail, TestOutput
+from backend.models.test import create_test_chain
+from schemas import IdeaDetail
 
 _LOGGER = logging.getLogger("main:server")
 
@@ -187,11 +186,6 @@ def brainstorm_idea_chat(
 
     return llm_response
 
-@app.post("/dummy")
-async def dummy(
-    data: TestOutput,
-):
-    return data
 
 if __name__ == "__main__":
     import uvicorn
