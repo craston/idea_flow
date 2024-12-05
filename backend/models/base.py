@@ -34,16 +34,16 @@ def create_chain(
     CACHE_DIR.mkdir(exist_ok=True, parents=True)
 
     cache = SQLiteCache(
-            str(CACHE_DIR / f"ollama-{LLMModel.gemma2_7b.replace(':', '-')}.db"))
+            str(CACHE_DIR / f"ollama-{LLMModel.gemma2_9b.replace(':', '-')}.db"))
     if not use_cache:
         cache = None
 
     model = OllamaLLM(
-        model=LLMModel.gemma2_7b,
+        model=LLMModel.gemma2_9b,
         cache=cache,
         temperature=temperature,
         top_p=1.0,
-        num_ctx=CONTEXT[LLMModel.gemma2_7b],
+        num_ctx=CONTEXT[LLMModel.gemma2_9b],
         num_predict=-1,
         base_url=OLLAMA_BASE_URL,
     )
