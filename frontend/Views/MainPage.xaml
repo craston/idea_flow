@@ -50,7 +50,7 @@
                 </StackLayout>
             </Border>
 
-            <!-- Task 2: Daily Puzzle -->
+            <!-- Task 2: Daily Riddle -->
             <Border BackgroundColor="#fff3e0"
                    Padding="15">
                 <Border.StrokeShape>
@@ -59,16 +59,16 @@
                 <StackLayout Orientation="Horizontal" Spacing="15">
                     <Image Source="puzzles_icon.png" WidthRequest="50" HeightRequest="50"/>
                     <VerticalStackLayout>
-                        <Label Text="Daily Puzzle"
+                        <Label Text="Daily Riddle"
                                FontSize="18"
                                FontAttributes="Bold"
                                TextColor="#ef6c00"/>
-                        <Label Text="Challenge your mind with a new puzzle every day."
+                        <Label Text="Challenge your mind with a new riddle every day."
                                FontSize="14"
                                TextColor="#e65100"
                                MaximumWidthRequest="250"/>
                         <Button Text="Play Now" BackgroundColor="#e65100" TextColor="White"
-                                CornerRadius="5" Command="{Binding NavigateToPuzzles}"/>
+                                CornerRadius="5" Command="{Binding NavigateToRiddle}"/>
                     </VerticalStackLayout>
                 </StackLayout>
             </Border>

@@ -1,0 +1,39 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:frontend.ViewModels"
+             x:Class="frontend.Views.RiddlePage"
+             Title="Daily Riddle">
+    <ContentPage.BindingContext>
+        <vm:RiddleViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <!-- Display the Riddle -->
+        <Label Text="{Binding Riddle}" 
+               FontSize="20" 
+               HorizontalOptions="Center" 
+               TextColor="Black" />
+
+        <!-- Input for the User's Answer -->
+        <Entry Placeholder="Your answer here..." 
+               Text="{Binding UserAnswer}" 
+               Keyboard="Default" />
+
+        <!-- Buttons for Submitting and Indicating 'I Don't Know' -->
+        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+            <Button Text="Submit"
+                    Command="{Binding SubmitAnswerCommand}" />
+            <Button Text="I Don't Know"
+                    Command="{Binding RevealAnswerCommand}" />
+        </HorizontalStackLayout>
+
+        <!-- Display Feedback -->
+        <Label Text="{Binding Feedback}" 
+               FontSize="16" 
+               TextColor="Gray" 
+               HorizontalOptions="Center" 
+               IsVisible="{Binding IsFeedbackVisible}" />
+
+    </VerticalStackLayout>
+</ContentPage>

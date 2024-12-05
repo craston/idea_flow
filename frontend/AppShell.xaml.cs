@@ -8,7 +8,7 @@ namespace frontend
             InitializeComponent();
             Routing.RegisterRoute("ConversationPage", typeof(ConversationPage));
             Routing.RegisterRoute("BrainstormPage", typeof(BrainstormPage));
-            Routing.RegisterRoute("PuzzlesPage", typeof(PuzzlesPage));
+            Routing.RegisterRoute("RiddlePage", typeof(RiddlePage));
             Routing.RegisterRoute("TestPage", typeof(TestPage));
             Routing.RegisterRoute("BrainstormChatPage", typeof(BrainstormChatPage));
             Routing.RegisterRoute("BrainstormIdeaPage", typeof(BrainstormIdeaPage));

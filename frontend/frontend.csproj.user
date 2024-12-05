@@ -26,7 +26,7 @@
     <MauiXaml Update="Views\ConversationPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Views\PuzzlesPage.xaml">
+    <MauiXaml Update="Views\RiddlePage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Views\SpinnerPopup.xaml">

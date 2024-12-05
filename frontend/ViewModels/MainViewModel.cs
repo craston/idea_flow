@@ -14,7 +14,7 @@ public partial class MainViewModel : ObservableObject
 
     public ICommand NavigateToConversation => new AsyncRelayCommand(Conversation);
     public ICommand NavigateToBrainstorm => new AsyncRelayCommand(Brainstorm);
-    public ICommand NavigateToPuzzles => new AsyncRelayCommand(Puzzles);
+    public ICommand NavigateToRiddle => new AsyncRelayCommand(Riddle);
 
     public ICommand NavigateToTest => new AsyncRelayCommand(Test);
 
@@ -28,9 +28,9 @@ public partial class MainViewModel : ObservableObject
         await Shell.Current.GoToAsync(nameof(BrainstormPage));
     }
 
-    private async Task Puzzles()
+    private async Task Riddle()
     {
-        await Shell.Current.GoToAsync(nameof(PuzzlesPage));
+        await Shell.Current.GoToAsync(nameof(RiddlePage));
     }
 
     private async Task Test()

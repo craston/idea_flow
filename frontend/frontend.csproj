@@ -71,8 +71,8 @@
 	  <Compile Update="Views\ConversationPage.xaml.cs">
 	    <DependentUpon>ConversationPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\PuzzlesPage.xaml.cs">
-	    <DependentUpon>PuzzlesPage.xaml</DependentUpon>
+	  <Compile Update="Views\RiddlePage.xaml.cs">
+	    <DependentUpon>RiddlePage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
@@ -89,7 +89,7 @@
 	  <MauiXaml Update="Views\ConversationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\PuzzlesPage.xaml">
+	  <MauiXaml Update="Views\RiddlePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\SpinnerPopup.xaml">
