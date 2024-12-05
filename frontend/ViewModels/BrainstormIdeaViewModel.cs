@@ -7,10 +7,8 @@ using System.Windows.Input;
 using frontend.Models;
 using frontend.Views;
 using System.Collections.ObjectModel;
-using Android.AdServices.Topics;
 using System.Text.Json;
 using System.Text;
-using Android.Widget;
 using CommunityToolkit.Maui.Views;
 namespace frontend.ViewModels;
 
