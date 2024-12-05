@@ -83,3 +83,19 @@ BRAINSTORM_TAGS_PROMPT = """
     The output must be provided as JSON object with the following schema:
     {format_instructions}
     """
+
+BRAINSTORM_IDEA_CHAT_PROMPT = """
+    You are helpful assistant.
+    You are provided with an idea generated using a brainstorm topic on {topic}. Your task is 
+    to answer the question provided by the user using the following information on the idea:
+    - **Title**: {title}
+    - **Description**: {description}
+    - **Highlights**: {highlights}
+    - **Activities**: {activities}
+    - **Tips**: {tips}
+
+    The user question is: "{question}".
+
+    The output must be provided as JSON object with the following schema:
+    {format_instructions}
+    """
