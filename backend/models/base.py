@@ -21,7 +21,7 @@ if not OLLAMA_BASE_URL:
     raise ValueError("Please provide OLLAMA_BASE_URL in the environment variables")
 
 CONTEXT = {
-    LLMModel.gemma2_7b: 8192,
+    LLMModel.gemma2_9b: 8192,
 }
 
 
@@ -29,14 +29,18 @@ def create_chain(
     prompt: PromptTemplate,
     output_parser: JsonOutputParser,
     temperature: float = 0.0,
+    use_cache: bool = True,
 ) -> RunnableSerializable:
     CACHE_DIR.mkdir(exist_ok=True, parents=True)
 
+    cache = SQLiteCache(
+            str(CACHE_DIR / f"ollama-{LLMModel.gemma2_7b.replace(':', '-')}.db"))
+    if not use_cache:
+        cache = None
+
     model = OllamaLLM(
         model=LLMModel.gemma2_7b,
-        cache=SQLiteCache(
-            str(CACHE_DIR / f"ollama-{LLMModel.gemma2_7b.replace(':', '-')}.db")
-        ),
+        cache=cache,
         temperature=temperature,
         top_p=1.0,
         num_ctx=CONTEXT[LLMModel.gemma2_7b],
