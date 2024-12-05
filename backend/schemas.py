@@ -1,13 +1,18 @@
 from enum import Enum
 from pydantic import BaseModel, Field
 from typing import Optional, List
+from datetime import datetime
+
+from pydantic.dataclasses import dataclass
 
 class LLMModel(str, Enum):
     gemma2_7b = "gemma2:9b-instruct-q6_K"
+
     
 class TestOutput(BaseModel):
     Answer: str = Field(description="The answer to the question.")
     
+
 class BrainstormingInput(BaseModel):
     topic: str  = Field(description="The main topic or question for brainstorming.")
     context: Optional[str] = Field(default=None, description="Additional context or details about the topic.")
@@ -17,7 +22,7 @@ class BrainstormingInput(BaseModel):
     idea_count: Optional[int] = Field(default=5, description="Number of ideas to generate (default is 5).")
 
 class IdeaDetail(BaseModel):
-    title: str = Field(description="A concise title for the idea.")
+    Title: str = Field(description="A concise title for the idea.")
     description: Optional[str] = Field(None, description="A detailed explanation of the idea.")
     highlights: Optional[List[str]] = Field(None, description="Key features or benefits of the idea.")
     activities: Optional[List[str]] = Field(None, description="Specific activities or tasks involved in the idea.")
@@ -30,3 +35,11 @@ class BrainstormingOutput(BaseModel):
 
 class BrainstormingExamplesOutput(BaseModel):
     examples: list[str] = Field(description="List of examples related to the question.")
+
+class ChatMessages(BaseModel):
+    content: str = Field(description="The content of the chat message.")
+    isUserMessage: bool = Field(decriptopn="Indicates if the message is from the user (True) or the model (False).")
+    timestamp: datetime = Field(description="The timestamp of the message.")
+
+class ChatHistory(BaseModel):
+    chat_messages: List[ChatMessages] = Field(description="List of chat messages.")
