@@ -9,7 +9,7 @@ class LLMModel(str, Enum):
     gemma2_7b = "gemma2:9b-instruct-q6_K"
 
     
-class TestOutput(BaseModel):
+class Basic(BaseModel):
     Answer: str = Field(description="The answer to the question.")
     
 
