@@ -29,6 +29,7 @@ CONTEXT = {
 def create_chain(
     prompt: PromptTemplate,
     output_parser: JsonOutputParser,
+    temperature: float = 0.0,
 ) -> RunnableSerializable:
     CACHE_DIR.mkdir(exist_ok=True, parents=True)
 
@@ -37,7 +38,7 @@ def create_chain(
         cache=SQLiteCache(
             str(CACHE_DIR / f"ollama-{LLMModel.gemma2_7b.replace(':', '-')}.db")
         ),
-        temperature=0.0,
+        temperature=temperature,
         top_p=1.0,
         num_ctx=CONTEXT[LLMModel.gemma2_7b],
         num_predict=-1,
