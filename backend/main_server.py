@@ -3,15 +3,22 @@ from __future__ import annotations
 from contextlib import asynccontextmanager
 import logging
 
-from typing import Optional
 from fastapi import FastAPI
 
 from pydantic.networks import IPv4Address
 from pydantic_settings import BaseSettings
 from pydantic import Field
 
-from models import create_bs_chain, create_bs_context_chain, create_bs_goals_chain, create_bs_preferences_chain, create_bs_tags_chain, create_test_chain
-
+from models import create_bs_chain
+from models import (
+    create_bs_context_chain,
+    create_bs_goals_chain,
+    create_bs_preferences_chain,
+    create_bs_tags_chain,
+    create_test_chain,
+)
+from models import create_bs_chat_chain
+from schemas import ChatHistory, IdeaDetail, TestOutput
 
 _LOGGER = logging.getLogger("main:server")
 
@@ -39,18 +46,22 @@ app = FastAPI(
     root_path=settings.fastapi_root_path,
 )
 
+
 @app.get("/test")
-def test(question: str):    
+def test(question: str):
     chain = create_test_chain()
-    
+
     try:
-        llm_response = chain.invoke({
-            "question": question,
-        })
+        llm_response = chain.invoke(
+            {
+                "question": question,
+            }
+        )
     except Exception as e:
         return {"error": str(e)}
-    
+
     return llm_response
+
 
 @app.get("/brainstorm")
 def brainstorm(
@@ -58,20 +69,22 @@ def brainstorm(
     context: str = "",
     goals: str = "",
     preferences: str = "",
-    tags: str= "",
+    tags: str = "",
     idea_count: int = 5,
 ):
     chain = create_bs_chain()
 
     try:
-        llm_responses = chain.invoke({
-            "topic": topic,
-            "context": context,
-            "goals": goals,
-            "preferences": preferences,
-            "tags": tags,
-            "idea_count": idea_count,
-        })
+        llm_responses = chain.invoke(
+            {
+                "topic": topic,
+                "context": context,
+                "goals": goals,
+                "preferences": preferences,
+                "tags": tags,
+                "idea_count": idea_count,
+            }
+        )
     except Exception as e:
         return {"error": str(e)}
 
@@ -83,59 +96,102 @@ def brainstorm_context(topic: str):
     chain = create_bs_context_chain()
 
     try:
-        llm_response = chain.invoke({
-            "topic": topic,
-        })
+        llm_response = chain.invoke(
+            {
+                "topic": topic,
+            }
+        )
     except Exception as e:
         return {"error": str(e)}
-    
+
     return llm_response
+
 
 @app.get("/brainstorm_goals")
 def brainstorm_goals(topic: str, context: str):
     chain = create_bs_goals_chain()
 
     try:
-        llm_response = chain.invoke({
-            "topic": topic,
-            "context": context,
-        })
+        llm_response = chain.invoke(
+            {
+                "topic": topic,
+                "context": context,
+            }
+        )
     except Exception as e:
         return {"error": str(e)}
-    
+
     return llm_response
+
 
 @app.get("/brainstorm_preferences")
 def brainstorm_preferences(topic: str, context: str, goals: str):
     chain = create_bs_preferences_chain()
 
     try:
-        llm_response = chain.invoke({
-            "topic": topic,
-            "context": context,
-            "goals": goals,
-        })
+        llm_response = chain.invoke(
+            {
+                "topic": topic,
+                "context": context,
+                "goals": goals,
+            }
+        )
 
     except Exception as e:
         return {"error": str(e)}
-    
+
     return llm_response
+
 
 @app.get("/brainstorm_tags")
 def brainstorm_tags(topic: str, context: str, goals: str, preferences: str):
     chain = create_bs_tags_chain()
 
     try:
-        llm_response = chain.invoke({
-            "topic": topic,
-            "context": context,
-            "goals": goals,
-            "preferences": preferences,
-        })
+        llm_response = chain.invoke(
+            {
+                "topic": topic,
+                "context": context,
+                "goals": goals,
+                "preferences": preferences,
+            }
+        )
     except Exception as e:
         return {"error": str(e)}
-    
+
     return llm_response
+
+
+@app.post("/idea_chat")
+def brainstorm_idea_chat(
+    brainstorm_topic: str,
+    question: str,
+    idea: IdeaDetail,
+):
+    chain = create_bs_chat_chain()
+
+    try:
+        llm_response = chain.invoke(
+            {
+                "topic": brainstorm_topic,
+                "title": idea.Title,
+                "description": idea.description,
+                "highlights": idea.highlights,
+                "activities": idea.activities,
+                "tips": idea.tips,
+                "question": question,
+            }
+        )
+    except Exception as e:
+        return {"error": str(e)}
+
+    return llm_response
+
+@app.post("/dummy")
+async def dummy(
+    data: TestOutput,
+):
+    return data
 
 if __name__ == "__main__":
     import uvicorn
