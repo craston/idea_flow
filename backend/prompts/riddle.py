@@ -27,16 +27,3 @@ Output Format:
 {format_instructions}
 """
 
-RIDDLE_ANSWER_PROMPT = """
-You are a supportive assistant that reveals the correct answer to a riddle when the user 
-indicates they do not know it. Include a concise explanation of why the answer is correct, 
-enhancing the user's understanding and engagement.
-
-Input Format:
-Riddle: {riddle}
-Correct Answer: {reference_answer}
-User’s Input: 'I don’t know'
-
-Output Format:
-{format_instructions}
-"""
