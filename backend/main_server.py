@@ -16,8 +16,8 @@ from backend.models.brainstorm import (
     create_bs_preferences_chain,
     create_bs_tags_chain,
 )
+from backend.models.riddle import create_riddle_chain, create_riddle_check_answer
 from backend.models.test import create_test_chain
-from backend.models.riddle import create_riddle_chain
 from schemas import IdeaDetail
 
 _LOGGER = logging.getLogger("main:server")
@@ -195,6 +195,24 @@ def gen_riddle():
     try:
         llm_response = chain.invoke(
             {},
+        )
+    except Exception as e:
+        return {"error": str(e)}
+
+    return llm_response
+
+
+@app.get("/riddle_check_answer")
+def riddle_check_answer(riddle_question: str, riddle_answer: str, user_answer: str):
+    chain = create_riddle_check_answer()
+
+    try:
+        llm_response = chain.invoke(
+            {
+                "riddle_question": riddle_question,
+                "riddle_answer": riddle_answer,
+                "user_answer": user_answer,
+            }
         )
     except Exception as e:
         return {"error": str(e)}
