@@ -8,6 +8,7 @@ from pydantic.dataclasses import dataclass
 
 class LLMModel(str, Enum):
     gemma2_9b = "gemma2:9b-instruct-q6_K"
+    llama31_8b ="llama3.1:8b-instruct-q6_K"
 
 
 class Basic(BaseModel):

@@ -30,6 +30,7 @@ def create_chain(
     output_parser: JsonOutputParser,
     temperature: float = 0.0,
     use_cache: bool = True,
+    model: LLMModel = LLMModel.gemma2_9b,
 ) -> RunnableSerializable:
     CACHE_DIR.mkdir(exist_ok=True, parents=True)
 
@@ -39,7 +40,7 @@ def create_chain(
         cache = None
 
     model = OllamaLLM(
-        model=LLMModel.gemma2_9b,
+        model=model,
         cache=cache,
         temperature=temperature,
         top_p=1.0,
