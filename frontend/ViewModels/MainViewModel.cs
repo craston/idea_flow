@@ -30,7 +30,12 @@ public partial class MainViewModel : ObservableObject
 
     private async Task Riddle()
     {
-        await Shell.Current.GoToAsync(nameof(RiddlePage));
+        // This is a hack.. Need to find a better way to find this page
+        var navigationParams = new Dictionary<string, object>
+        {
+       
+        };
+        await Shell.Current.GoToAsync(nameof(RiddlePage), navigationParams);
     }
 
     private async Task Test()

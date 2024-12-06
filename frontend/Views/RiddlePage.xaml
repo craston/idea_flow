@@ -10,7 +10,7 @@
     <VerticalStackLayout Padding="20" Spacing="15">
 
         <!-- Display the Riddle -->
-        <Label Text="{Binding Riddle}" 
+        <Label Text="{Binding Riddle_question}" 
                FontSize="20" 
                HorizontalOptions="Center" 
                TextColor="Black" />
