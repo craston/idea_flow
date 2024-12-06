@@ -19,8 +19,8 @@ provide enthusiastic and positive feedback.
 explain how their response is related to the correct answer.
 
 Input Format:
-Riddle: {riddle}
-Correct Answer: {reference_answer}
+Riddle: {riddle_question}
+Correct Answer: {riddle_answer}
 User's Answer: {user_answer}
 
 Output Format:
