@@ -8,7 +8,7 @@ from backend.prompts.riddle import (
     RIDDLE_CHECK_ANSWER_PROMPT,
     RIDDLE_PROMPT,
 )
-from backend.schemas import RiddleAnswerOutput, RiddleCheckAnswerOutput, RiddleOutput
+from backend.schemas import LLMModel, RiddleAnswerOutput, RiddleCheckAnswerOutput, RiddleOutput
 
 
 def create_riddle_chain() -> RunnableSerializable:
@@ -19,4 +19,4 @@ def create_riddle_chain() -> RunnableSerializable:
         partial_variables={"format_instructions": parser.get_format_instructions()},
     )
 
-    return create_chain(prompt, parser, temperature=0.8, use_cache=False)
+    return create_chain(prompt, parser, temperature=1.0, use_cache=False, model=LLMModel.gemma2_9b)
