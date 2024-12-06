@@ -75,13 +75,13 @@ class ChatHistory(BaseModel):
 
 
 class RiddleOutput(BaseModel):
-    riddle: str = Field(description="The generated riddle.")
-    answer: str = Field(description="The correct answer to the riddle.")
+    riddle_question: str = Field(description="The generated riddle.")
+    riddle_answer: str = Field(description="The correct answer to the riddle.")
 
 
 class RiddleCheckAnswerInput(BaseModel):
-    riddle: str = Field(description="The riddle provided to the user.")
-    reference_answer: str = Field(description="The correct answer to the riddle.")
+    riddle_question: str = Field(description="The riddle provided to the user.")
+    riddle_answer: str = Field(description="The correct answer to the riddle.")
     user_answer: str = Field(description="The user's answer to the riddle.")
 
 
@@ -90,10 +90,10 @@ class RiddleCheckAnswerOutput(BaseModel):
 
 
 class RiddleAnswerInput(BaseModel):
-    riddle: str = Field(description="The riddle provided to the user.")
-    reference_answer: str = Field(description="The correct answer to the riddle.")
+    riddle_question: str = Field(description="The riddle provided to the user.")
+    user_answer: str = Field(description="The answer to the riddle provided by the user.")
 
 
 class RiddleAnswerOutput(BaseModel):
-    answer: str = Field(description="The correct answer to the riddle.")
+    riddle_answer: str = Field(description="The correct answer to the riddle.")
     explanation: str = Field(description="Explanation of why the answer is correct.")
