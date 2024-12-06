@@ -138,7 +138,7 @@ public partial class BrainstormIdeaViewModel : ObservableObject, IQueryAttributa
             if (!response.IsSuccessStatusCode)
             {
                 string errorJson = await response.Content.ReadAsStringAsync();
-                await Application.Current!.MainPage!.DisplayAlert("Error", errorJson, "OK");
+                await Application.Current!.Windows![0].Page!.DisplayAlert("Error", errorJson, "OK");
                 return "";
             }
             string responseJson = await response.Content.ReadAsStringAsync();
@@ -147,7 +147,7 @@ public partial class BrainstormIdeaViewModel : ObservableObject, IQueryAttributa
         }
         catch (Exception ex)
         {
-            await Application.Current!.MainPage!.DisplayAlert("Error", ex.ToString(), "OK");
+            await Application.Current!.Windows![0].Page!.DisplayAlert("Error", ex.ToString(), "OK");
             return "";
         }
     }
