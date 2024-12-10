@@ -17,11 +17,10 @@ public partial class RiddleViewModel: ObservableObject, IQueryAttributable
     private string _feedback;
     private bool _isFeedbackVisible;
 
-    public static string BaseAddress =
+    private static string BaseAddress =
         DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:8000" : "http://localhost:8000";
-    public static string RiddleUrl = $"{BaseAddress}/gen_riddle/";
-    public static string RightAnswerUrl = $"{BaseAddress}/check_answer_riddle/";
-    public static string RevealAnswerUrl = $"{BaseAddress}/reveal_answer_riddle/";
+    private static string RiddleUrl = $"{BaseAddress}/gen_riddle/";
+    private static string RightAnswerUrl = $"{BaseAddress}/riddle_check_answer/";
     public string Riddle_question
     {
         get => _riddle_question!;
@@ -76,7 +75,32 @@ public partial class RiddleViewModel: ObservableObject, IQueryAttributable
 
     private async Task SubmitAnswer()
     {
-        
+        var spinner = new SpinnerPopup();
+        Application.Current!.Windows![0].Page!.ShowPopup(spinner);
+        var uri = new UriBuilder(RightAnswerUrl);
+        var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+        query["riddle_question"] = Riddle_question;
+        query["user_answer"] = UserAnswer;
+        query["riddle_answer"] = _riddle_answer;
+        uri.Query = query.ToString();
+
+        using ( var httpClient = new HttpClient()) 
+        {
+            try
+            {
+                var response = await httpClient.GetAsync(uri.ToString());
+                response.EnsureSuccessStatusCode();
+                var content = await response.Content.ReadAsStringAsync();
+                var output = JsonConvert.DeserializeObject<RiddleFeedback>(content)!;
+                Feedback = output.Feedback!;
+                IsFeedbackVisible = true;
+            }
+            catch (Exception e)
+            {
+                await Application.Current!.Windows![0].Page!.DisplayAlert("Error", e.Message, "OK");
+            }
+        }
+        spinner.Close();
     }
 
     private async Task RevealAnswer()
