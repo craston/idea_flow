@@ -8,6 +8,9 @@ from pydantic import Field
 from pydantic.networks import IPv4Address
 from pydantic_settings import BaseSettings
 
+from langchain_core.chat_history import BaseChatMessageHistory
+from langchain_community.chat_message_histories import ChatMessageHistory
+
 from backend.models.brainstorm import (
     create_bs_chain,
     create_bs_chat_chain,
@@ -16,8 +19,9 @@ from backend.models.brainstorm import (
     create_bs_preferences_chain,
     create_bs_tags_chain,
 )
+from backend.models.refine import create_idea_refine_chain
 from backend.models.riddle import create_riddle_chain, create_riddle_check_answer
-from backend.models.test import create_test_chain
+from backend.models.test import create_test_chain, create_test_chain_with_history
 from schemas import IdeaDetail
 
 _LOGGER = logging.getLogger("main:server")
@@ -31,6 +35,14 @@ class Config(BaseSettings):
 
 
 settings = Config()
+
+store = {}
+
+
+def get_session_history(session_id: str) -> BaseChatMessageHistory:
+    if session_id not in store:
+        store[session_id] = ChatMessageHistory()
+    return store[session_id]
 
 
 @asynccontextmanager
@@ -56,6 +68,21 @@ def test(question: str):
             {
                 "question": question,
             }
+        )
+    except Exception as e:
+        return {"error": str(e)}
+
+    return llm_response
+
+
+@app.get("/test_with_history")
+def test_with_history(question: str):
+    chain = create_test_chain_with_history(get_session_history)
+
+    try:
+        llm_response = chain.invoke(  # noqa: T201
+            {"question": question},
+            config={"configurable": {"session_id": "foo"}},
         )
     except Exception as e:
         return {"error": str(e)}
