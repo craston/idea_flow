@@ -1,16 +1,16 @@
 from __future__ import annotations
 
+import json
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from pydantic import Field
 from pydantic.networks import IPv4Address
 from pydantic_settings import BaseSettings
+from sqlalchemy.orm import Session
 
-from langchain_core.chat_history import BaseChatMessageHistory
-from langchain_community.chat_message_histories import ChatMessageHistory
-
+from backend.chat_history import InMemoryHistory
 from backend.models.brainstorm import (
     create_bs_chain,
     create_bs_chat_chain,
@@ -19,12 +19,15 @@ from backend.models.brainstorm import (
     create_bs_preferences_chain,
     create_bs_tags_chain,
 )
-from backend.models.refine import create_idea_refine_chain
 from backend.models.riddle import create_riddle_chain, create_riddle_check_answer
 from backend.models.test import create_test_chain, create_test_chain_with_history
+from database.database import Base, DbChatMessageHistory, SessionLocal, engine
 from schemas import IdeaDetail
 
 _LOGGER = logging.getLogger("main:server")
+
+# Create the database tables
+Base.metadata.create_all(bind=engine)
 
 
 class Config(BaseSettings):
@@ -35,14 +38,6 @@ class Config(BaseSettings):
 
 
 settings = Config()
-
-store = {}
-
-
-def get_session_history(session_id: str) -> BaseChatMessageHistory:
-    if session_id not in store:
-        store[session_id] = ChatMessageHistory()
-    return store[session_id]
 
 
 @asynccontextmanager
@@ -57,6 +52,50 @@ app = FastAPI(
     lifespan=lifespan,
     root_path=settings.fastapi_root_path,
 )
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+def get_session_history_db(session_id: str, db: Session) -> InMemoryHistory:
+    history_record = (
+        db.query(DbChatMessageHistory)
+        .filter(DbChatMessageHistory.session_id == session_id)
+        .first()
+    )
+    if history_record is None:
+        history = InMemoryHistory()
+        history_record = DbChatMessageHistory(
+            session_id=session_id, history=json.dumps(history.to_dict())
+        )
+        db.add(history_record)
+        db.commit()
+        db.refresh(history_record)
+    else:
+        history = InMemoryHistory.from_dict(json.loads(history_record.history))
+    return history
+
+
+def save_session_history(session_id: str, history: InMemoryHistory, db: Session):
+    history_record = (
+        db.query(DbChatMessageHistory)
+        .filter(DbChatMessageHistory.session_id == session_id)
+        .first()
+    )
+    if history_record is None:
+        history_record = DbChatMessageHistory(
+            session_id=session_id, history=json.dumps(history.to_dict())
+        )
+        db.add(history_record)
+    else:
+        history_record.history = json.dumps(history.to_dict())
+    db.commit()
+    db.refresh(history_record)
 
 
 @app.get("/test")
@@ -76,14 +115,23 @@ def test(question: str):
 
 
 @app.get("/test_with_history")
-def test_with_history(question: str):
-    chain = create_test_chain_with_history(get_session_history)
+def test_with_history(
+    question: str, db: Session = Depends(get_db), session_id: str = "foo"
+):
+    history = get_session_history_db(session_id, db)
+
+    def get_session_history_callable(session_id: str):
+        return history
+
+    chain = create_test_chain_with_history(get_session_history_callable)
 
     try:
         llm_response = chain.invoke(  # noqa: T201
             {"question": question},
-            config={"configurable": {"session_id": "foo"}},
+            config={"configurable": {"session_id": session_id}},
         )
+        save_session_history(session_id, history, db)
+
     except Exception as e:
         return {"error": str(e)}
 
