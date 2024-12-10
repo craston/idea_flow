@@ -16,3 +16,10 @@ class InMemoryHistory(BaseChatMessageHistory, BaseModel):
 
     def clear(self) -> None:
         self.messages = []
+
+    def to_dict(self) -> dict:
+        return self.model_dump()
+    
+    @classmethod
+    def from_dict(cls, data: dict) -> None:
+        return cls(**data)
