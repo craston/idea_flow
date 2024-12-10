@@ -23,7 +23,7 @@
     <MauiXaml Update="Views\BrainstormPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Views\ConversationPage.xaml">
+    <MauiXaml Update="Views\RefinePage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Views\RiddlePage.xaml">

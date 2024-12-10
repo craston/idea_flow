@@ -12,15 +12,15 @@ public partial class MainViewModel : ObservableObject
 
     }
 
-    public ICommand NavigateToConversation => new AsyncRelayCommand(Conversation);
+    public ICommand NavigateToRefine => new AsyncRelayCommand(Refine);
     public ICommand NavigateToBrainstorm => new AsyncRelayCommand(Brainstorm);
     public ICommand NavigateToRiddle => new AsyncRelayCommand(Riddle);
 
     public ICommand NavigateToTest => new AsyncRelayCommand(Test);
 
-    private async Task Conversation()
+    private async Task Refine()
     {
-        await Shell.Current.GoToAsync(nameof(ConversationPage));
+        await Shell.Current.GoToAsync(nameof(RefinePage));
     }
 
     private async Task Brainstorm()

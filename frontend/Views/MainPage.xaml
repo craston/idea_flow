@@ -82,16 +82,16 @@
                 <StackLayout Orientation="Horizontal" Spacing="15">
                     <Image Source="conversation_icon.png" WidthRequest="50" HeightRequest="50"/>
                     <VerticalStackLayout>
-                        <Label Text="Conversation Starter"
+                        <Label Text="Idea Refinement"
                                FontSize="18"
                                FontAttributes="Bold"
                                TextColor="#2e7d32"/>
-                        <Label Text="Break the ice and spark engaging conversations."
+                        <Label Text="Refinement your ideas and drafts"
                                FontSize="14"
                                TextColor="#1b5e20"
                                MaximumWidthRequest="250"/>
                         <Button Text="Start Chat" BackgroundColor="#1b5e20" TextColor="White"
-                                CornerRadius="5" Command="{Binding NavigateToConversation}"/>
+                                CornerRadius="5" Command="{Binding NavigateToRefine}"/>
                     </VerticalStackLayout>
                 </StackLayout>
             </Border>

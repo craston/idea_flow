@@ -68,8 +68,8 @@
 	  <Compile Update="Views\BrainstormPage.xaml.cs">
 	    <DependentUpon>BrainstormPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\ConversationPage.xaml.cs">
-	    <DependentUpon>ConversationPage.xaml</DependentUpon>
+	  <Compile Update="Views\RefinePage.xaml.cs">
+	    <DependentUpon>RefinePage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\RiddlePage.xaml.cs">
 	    <DependentUpon>RiddlePage.xaml</DependentUpon>
@@ -86,7 +86,7 @@
 	  <MauiXaml Update="Views\BrainstormPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ConversationPage.xaml">
+	  <MauiXaml Update="Views\RefinePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\RiddlePage.xaml">

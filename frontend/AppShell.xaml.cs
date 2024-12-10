@@ -6,7 +6,7 @@ namespace frontend
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute("ConversationPage", typeof(ConversationPage));
+            Routing.RegisterRoute("RefinePage", typeof(RefinePage));
             Routing.RegisterRoute("BrainstormPage", typeof(BrainstormPage));
             Routing.RegisterRoute("RiddlePage", typeof(RiddlePage));
             Routing.RegisterRoute("TestPage", typeof(TestPage));
