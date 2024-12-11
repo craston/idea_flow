@@ -19,9 +19,12 @@ from backend.models.brainstorm import (
     create_bs_preferences_chain,
     create_bs_tags_chain,
 )
+from backend.models.refine import (
+    create_idea_refine_chain,
+    create_idea_refine_chat_chain,
+)
 from backend.models.riddle import create_riddle_chain, create_riddle_check_answer
 from backend.models.test import create_test_chain, create_test_chain_with_history
-from backend.models.refine import create_idea_refine_chain
 from database.database import Base, DbChatMessageHistory, SessionLocal, engine
 from schemas import IdeaDetail
 
@@ -295,19 +298,47 @@ def riddle_check_answer(riddle_question: str, riddle_answer: str, user_answer: s
 
     return llm_response
 
+
 @app.get("/refine_idea")
 def refine_idea(idea: str):
     chain = create_idea_refine_chain()
 
     try:
+        llm_response = chain.invoke({"idea": idea})
+    except Exception as e:
+        return {"error": str(e)}
+    return llm_response
+
+
+@app.get("/refine_idea_chat")
+def refine_idea_chat(
+    idea: str,
+    org_reply: str,
+    question: str,
+    db: Session = Depends(get_db),
+    session_id: str = "foobar",
+):
+    history = get_session_history_db(session_id, db)
+
+    def get_session_history_callable(session_id: str):
+        return history
+
+    chain = create_idea_refine_chat_chain(get_session_history_callable)
+
+    try:
         llm_response = chain.invoke(
             {
-                "idea": idea
-            }
+                "idea": idea,
+                "org_reply": org_reply,
+                "question": question,
+            },
+            config={"configurable": {"session_id": session_id}},
         )
+        save_session_history(session_id, history, db)
     except Exception as e:
-        return{"error": str(e)}
+        return {"error": str(e)}
     return llm_response
+
 
 if __name__ == "__main__":
     import uvicorn
