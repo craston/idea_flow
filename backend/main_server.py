@@ -21,6 +21,7 @@ from backend.models.brainstorm import (
 )
 from backend.models.riddle import create_riddle_chain, create_riddle_check_answer
 from backend.models.test import create_test_chain, create_test_chain_with_history
+from backend.models.refine import create_idea_refine_chain
 from database.database import Base, DbChatMessageHistory, SessionLocal, engine
 from schemas import IdeaDetail
 
@@ -294,6 +295,19 @@ def riddle_check_answer(riddle_question: str, riddle_answer: str, user_answer: s
 
     return llm_response
 
+@app.get("/refine_idea")
+def refine_idea(idea: str):
+    chain = create_idea_refine_chain()
+
+    try:
+        llm_response = chain.invoke(
+            {
+                "idea": idea
+            }
+        )
+    except Exception as e:
+        return{"error": str(e)}
+    return llm_response
 
 if __name__ == "__main__":
     import uvicorn

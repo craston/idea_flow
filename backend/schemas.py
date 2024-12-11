@@ -97,3 +97,8 @@ class RiddleAnswerInput(BaseModel):
 class RiddleAnswerOutput(BaseModel):
     riddle_answer: str = Field(description="The correct answer to the riddle.")
     explanation: str = Field(description="Explanation of why the answer is correct.")
+
+class RefineIdeaOutput(BaseModel):
+    strengths: List[str] = Field(description="List of strengths identified in the idea.")
+    weaknesses: List[str] = Field(description="List of weaknesses identified in the idea.")
+    suggestions: List[str] = Field(description="List of suggestions for improvement.")
