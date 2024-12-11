@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:frontend.ViewModels"
              x:Class="frontend.Views.RefinePage"
-             Title="Daily Riddle">
+             Title="Refine your ideas and drafts">
     <ContentPage.BindingContext>
         <vm:RefineViewModel />
     </ContentPage.BindingContext>
