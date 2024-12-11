@@ -23,7 +23,7 @@ Suggestions:
 3. Develop a cost-effective production process for personalization to maintain profitability.
 """
 
-REFINE_IDEA_PROMPT_2="""
+REFINE_IDEA_PROMPT_2 = """
 Using the reply to the orginal idea, answer the follow-up question:
 Original idea: {idea}
 Reply: {org_reply}
