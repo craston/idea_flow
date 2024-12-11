@@ -1,12 +1,33 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:frontend.ViewModels"
              x:Class="frontend.Views.RefinePage"
-             Title="RefinePage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to Idea Refinement Page!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+             Title="Daily Riddle">
+    <ContentPage.BindingContext>
+        <vm:RefineViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <!-- User Input -->
+        <Entry Placeholder="Your idea/draft to refine..." 
+               Text="{Binding Idea}" 
+               Keyboard="Default" />
+
+        <!-- Buttons for Submitting and Indicating 'I Don't Know' -->
+        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+            <Button Text="Refine the Idea"
+                    Command="{Binding RefineIdeaCommand}" />
+            <Button Text="Re-write the draft"
+                    Command="{Binding RefineDraftCommand}" />
+        </HorizontalStackLayout>
+
+        <!-- Display Feedback -->
+        <Label Text="{Binding Feedback}" 
+               FontSize="16" 
+               TextColor="Gray" 
+               HorizontalOptions="Center" 
+               IsVisible="{Binding IsFeedbackVisible}" />
+
     </VerticalStackLayout>
 </ContentPage>
