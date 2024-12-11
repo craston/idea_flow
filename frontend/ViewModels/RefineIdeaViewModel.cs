@@ -16,7 +16,7 @@ public partial class RefineIdeaViewModel : ObservableObject, IQueryAttributable
 {
     public static string BaseAddress =
        DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:8000" : "http://localhost:8000";
-    public static string RefineChatUrl = $"{BaseAddress}/idea_chat/";
+    public static string RefineChatUrl = $"{BaseAddress}/refine_idea_chat/";
 
     private string _idea;
 
@@ -50,6 +50,7 @@ public partial class RefineIdeaViewModel : ObservableObject, IQueryAttributable
         set => SetProperty(ref _newMessage, value);
     }
 
+    private string _sessionId;
     public RefineIdeaViewModel()
     {
         Messages = new ObservableCollection<ChatMessage>
@@ -64,10 +65,10 @@ public partial class RefineIdeaViewModel : ObservableObject, IQueryAttributable
 
         chat = new IdeaRefineChat();
         chat.Messages = new List<ChatMessage>(Messages);
+        _sessionId = Guid.NewGuid().ToString();
     }
-
-    public ICommand BackCommand => new RelayCommand(Back);
-
+    
+    public ICommand SendMessageCommand => new AsyncRelayCommand(SendMessage);
 
     private void Back()
     {
@@ -88,7 +89,7 @@ public partial class RefineIdeaViewModel : ObservableObject, IQueryAttributable
         Idea = value2!;
     }
 
-    private async void SendMessage()
+    private async Task SendMessage()
     {
         if (string.IsNullOrWhiteSpace(NewMessage))
         {
@@ -102,13 +103,13 @@ public partial class RefineIdeaViewModel : ObservableObject, IQueryAttributable
         };
         Messages.Add(message);
         chat.Messages.Add(message);
-        NewMessage = "";
 
         var spinner = new SpinnerPopup();
         Application.Current!.Windows![0].Page!.ShowPopup(spinner);
-        var response = await GetResponse(message.Content);
+        var response = await GetResponse(GetUri());
+        NewMessage = "";
         spinner.Close();
-        await Application.Current!.MainPage!.DisplayAlert("Response", response, "OK");
+        await Application.Current!.Windows[0]!.Page!.DisplayAlert("Response", response, "OK");
 
         var responseMessage = new ChatMessage
         {
@@ -119,19 +120,15 @@ public partial class RefineIdeaViewModel : ObservableObject, IQueryAttributable
         Messages.Add(responseMessage);
         chat.Messages.Add(responseMessage);
 
-
     }
 
-    private async Task<string> GetResponse(string message)
+    private async Task<string> GetResponse(UriBuilder uri)
     {
-        var uri = GetUri(message);
         using var httpClient = new HttpClient();
+        httpClient.Timeout = TimeSpan.FromMinutes(10);
         try
         {
-            var ideaJson = JsonSerializer.Serialize(Idea);
-            await Application.Current!.Windows![0].Page!.DisplayAlert("Request", ideaJson, "OK");
-            var content = new StringContent(ideaJson, Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync(uri.ToString(), content);
+            var response = await httpClient.GetAsync(uri.ToString());
             if (!response.IsSuccessStatusCode)
             {
                 string errorJson = await response.Content.ReadAsStringAsync();
@@ -149,11 +146,14 @@ public partial class RefineIdeaViewModel : ObservableObject, IQueryAttributable
         }
     }
 
-    private UriBuilder GetUri(string message)
+    private UriBuilder GetUri()
     {
         UriBuilder uri = new(RefineChatUrl);
         var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
-        query["question"] = message;
+        query["idea"] = Idea;
+        query["org_reply"] = JsonSerializer.Serialize(Output);
+        query["question"] = NewMessage;
+        query["session_id"] = _sessionId;
         uri.Query = query.ToString();
         return uri;
     }

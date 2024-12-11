@@ -8,10 +8,8 @@
     <ContentPage.BindingContext>
         <viewModels:RefineIdeaViewModel />
     </ContentPage.BindingContext>
-    <Shell.BackButtonBehavior>
-        <BackButtonBehavior Command="{Binding BackCommand}"/>
-    </Shell.BackButtonBehavior>
-    <Grid>
+  
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
