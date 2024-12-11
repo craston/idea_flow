@@ -37,8 +37,6 @@ public partial class BrainstormViewModel : ObservableObject
     private List<string> _examples = [];
     private bool _isNextEnabled = false;
 
-    SpinnerPopup spinner = new();
-
     private BrainstormInput _brainstormInput = new();
     public string CurrentPrompt
     {
@@ -202,10 +200,12 @@ public partial class BrainstormViewModel : ObservableObject
 
     private async Task Next()
     {
+        var spinner = new SpinnerPopup();
         Application.Current!.Windows![0].Page!.ShowPopup(spinner);
         SaveInput();
         if (CurrentPromptIndex == 5)
         {
+            spinner.Close();
             await GoToBrainstormChatPage();
             return;
         }
@@ -223,6 +223,7 @@ public partial class BrainstormViewModel : ObservableObject
 
     private async Task Back()
     {
+        var spinner = new SpinnerPopup();
         Application.Current!.Windows![0].Page!.ShowPopup(spinner);
         CurrentPromptIndex--;
         await UpdateExamples();
