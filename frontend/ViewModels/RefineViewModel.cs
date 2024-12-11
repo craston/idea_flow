@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.Input;
 using frontend.Models;
 using frontend.Views;
 using Newtonsoft.Json;
-using System.Runtime.CompilerServices;
 using System.Web;
 using System.Windows.Input;
 
@@ -48,18 +47,15 @@ public partial class RefineViewModel: ObservableObject
         {
             return;
         }
-        await Application.Current!.Windows![0].Page!.DisplayAlert("Refined Idea", FormatOutput(output), "OK");
+
+        var navigationParams = new Dictionary<string, object>
+        {
+            ["output"] = output,
+            ["idea"] = Idea
+        };
+
+        await Shell.Current.GoToAsync(nameof(RefineIdeaPage), navigationParams);
     }
-
-    private string FormatOutput(RefineIdeaOutput output)
-    {
-        var strengths = string.Join("\n", output.Strengths);
-        var weaknesses = string.Join("\n", output.Weaknesses);
-        var suggestions = string.Join("\n", output.Suggestions);
-
-        return $"Strengths:\n{strengths}\n\nWeaknesses:\n{weaknesses}\n\nSuggestions:\n{suggestions}";
-    }
-
     private static async Task<RefineIdeaOutput?> GetResponse(UriBuilder uri)
     {
         using (var httpClient = new HttpClient())
