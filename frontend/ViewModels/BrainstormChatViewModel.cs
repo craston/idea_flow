@@ -51,7 +51,14 @@ public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributa
 
     public ICommand IdeaClickedCommand => new AsyncRelayCommand<IdeaDetail>(IdeaClicked!);
 
+    public ICommand SaveCommand => new RelayCommand<IdeaDetail>(Save);
 
+    private void Save(IdeaDetail? idea)
+    {
+        if (idea == null) return;
+        idea.IsSaved = !idea.IsSaved;
+        idea.ImgSource = idea.IsSaved ? "heart_filled.png" : "heart.png";
+    }
     private async Task IdeaClicked(IdeaDetail idea)
     {
         var navigationParams = new Dictionary<string, object>

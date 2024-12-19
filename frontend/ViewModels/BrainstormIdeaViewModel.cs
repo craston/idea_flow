@@ -71,6 +71,13 @@ public partial class BrainstormIdeaViewModel : ObservableObject, IQueryAttributa
 
     public ICommand SendMessageCommand => new RelayCommand(SendMessage);
 
+    public ICommand SaveCommand => new RelayCommand(Save);
+
+    private void Save()
+    {
+        Idea.IsSaved = !Idea.IsSaved;
+        Idea.ImgSource = Idea.IsSaved ? "heart_filled.png" : "heart.png";
+    }
     private void Back()
     {
         var navigationParams = new Dictionary<string, object>

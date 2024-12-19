@@ -53,7 +53,7 @@
                             <!-- Save Toggle Icon -->
                             <ImageButton
                                 Source="{Binding Idea.ImgSource}"
-                                Command="{Binding Idea.ToggleSaveCommand}"
+                                Command="{Binding SaveCommand}"
                                 BackgroundColor="Transparent"
                                 VerticalOptions="Center"
                                 HorizontalOptions="End"

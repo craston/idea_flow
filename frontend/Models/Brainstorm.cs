@@ -23,30 +23,15 @@ namespace frontend.Models
         public List<string> Activities { get; set; } = [];
         public List<string> Tips { get; set; } = [];
 
-        private bool _isSaved;
+        public bool IsSaved { get; set; } = false;
         private string _imgSource = "heart.png";
-        public bool IsSaved
-        {
-            get => _isSaved;
-            set => SetProperty(ref _isSaved, value);
-        }
-
         public string ImgSource
         {
             get => _imgSource;
             set => SetProperty(ref _imgSource, value);
         }
-        public ICommand ToggleSaveCommand => new RelayCommand(ToggleSave);
-
         public IdeaDetail()
         {
-            IsSaved = false;
-        }
-        private void ToggleSave()
-        {
-            IsSaved = !IsSaved;
-
-            ImgSource = IsSaved ? "heart_filled.png" : "heart.png";
         }
     }
     public class BrainstormingOutput

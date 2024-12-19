@@ -49,7 +49,9 @@
                                     <!-- Save Toggle Icon -->
                                     <ImageButton
                                         Source="{Binding ImgSource}"
-                                        Command="{Binding ToggleSaveCommand}"
+                                        Command="{Binding x:DataType='viewmodels:BrainstormChatViewModel', 
+                                                    Source={RelativeSource AncestorType={x:Type viewmodels:BrainstormChatViewModel}}, Path=SaveCommand}"
+                                           CommandParameter="{Binding}"
                                         BackgroundColor="Transparent"
                                         VerticalOptions="Center"
                                         HorizontalOptions="End"
