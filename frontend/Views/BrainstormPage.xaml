@@ -6,6 +6,16 @@
     <ContentPage.BindingContext>
         <viewmodels:BrainstormViewModel />
     </ContentPage.BindingContext>
+
+    <!-- Toolbar Item for Saved Ideas -->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Saved Ideas"
+                 IconImageSource="heart.png"
+                 Order="Primary"
+                 Priority="0"
+                 Command="{Binding SavedIdeasCommand}" />
+    </ContentPage.ToolbarItems>
+    
     <Grid Margin=" 0" Padding="0">
         <ScrollView VerticalOptions="FillAndExpand" 
                     HorizontalOptions="FillAndExpand"

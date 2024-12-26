@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="frontend.Views.SavedIdeasPage"
+             xmlns:viewmodels="clr-namespace:frontend.ViewModels"
+             Title="SavedIdeasPage">
+
+    <ContentPage.BindingContext>
+        <viewmodels:SavedIdeasViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <CollectionView ItemsSource="{Binding SavedIdeas}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="10">
+                        <Label Text="{Binding Title}" FontSize="20" FontAttributes="Bold" />
+                        <Label Text="{Binding Description}" FontSize="16" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </ContentPage.Content>
+</ContentPage>

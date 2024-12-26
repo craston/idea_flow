@@ -198,6 +198,10 @@ public partial class BrainstormViewModel : ObservableObject
     public ICommand BackCommand => new AsyncRelayCommand(Back);
     public ICommand SkipCommand => new AsyncRelayCommand(Skip);
 
+    public ICommand SavedIdeasCommand => new AsyncRelayCommand(async () =>
+    {
+        await Shell.Current.GoToAsync(nameof(SavedIdeasPage));
+    });
     private async Task Next()
     {
         var spinner = new SpinnerPopup();
