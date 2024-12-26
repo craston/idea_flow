@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System.Web;
 
 using CommunityToolkit.Mvvm.Input;
@@ -36,7 +36,9 @@ public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributa
         set => SetProperty(ref _topic, value);
     }
 
-    private BrainstormingOutput Output = new ();
+    private BrainstormingOutput Output = new();
+
+    private BrainstormInput input = new();
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         var Input = query.TryGetValue("Input", out var input) ? (BrainstormInput)input! : new BrainstormInput();
@@ -53,25 +55,47 @@ public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributa
 
     public ICommand SaveCommand => new RelayCommand<IdeaDetail>(Save);
 
-    private void Save(IdeaDetail? idea)
+    private async void Save(IdeaDetail? idea)
     {
         if (idea == null) return;
         idea.IsSaved = !idea.IsSaved;
         idea.ImgSource = idea.IsSaved ? "heart_filled.png" : "heart.png";
+
+        if (idea.IsSaved)
+        {
+            input.IdeaList.Add(idea.Id);
+            idea.BrainstormInputId = input.Id;
+            await App.Database.SaveBrainstormInputAsync(input);
+            await App.Database.SaveIdeaDetailAsync(idea);
+        }
+        else
+        {
+            input.IdeaList.Remove(idea.Id);
+            if (input.IdeaList.Count() == 0)
+            {
+                await App.Database.DeleteBrainstormInputAsync(input);
+            }
+            else
+            {
+                await App.Database.SaveBrainstormInputAsync(input);
+            }
+            await App.Database.DeleteIdeaDetailAsync(idea);
+        }
     }
     private async Task IdeaClicked(IdeaDetail idea)
     {
         var navigationParams = new Dictionary<string, object>
         {
-            ["Idea"]= idea,
+            ["Idea"] = idea,
             ["Brainstorm_output"] = Output
         };
 
         await Shell.Current.GoToAsync(nameof(BrainstormIdeaPage), navigationParams);
-        
+
     }
     private async Task<BrainstormingOutput> GetBrainStormOutput(BrainstormInput Input)
     {
+        input = Input;
         UriBuilder uri = new(_bsUrl);
         var query = HttpUtility.ParseQueryString(uri.Query);
         query["topic"] = Input.Topic;
@@ -85,7 +109,12 @@ public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributa
         return await StartBrainstorming(uri.ToString());
     }
 
-    private async Task<BrainstormingOutput> StartBrainstorming(string url)
+    private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true // Allow case-insensitive property matching
+    };
+
+    private async Task<BrainstormingOutput?> StartBrainstorming(string url)
     {
         using (var httpClient = new HttpClient())
         {
@@ -100,7 +129,7 @@ public partial class BrainstormChatViewModel : ObservableObject, IQueryAttributa
                     return new BrainstormingOutput();
                 }
                 string responseJson = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<BrainstormingOutput>(responseJson)!;
+                return JsonSerializer.Deserialize<BrainstormingOutput>(responseJson, _jsonOptions);
             }
             catch (Exception ex)
             {
